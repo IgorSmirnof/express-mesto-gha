@@ -8,17 +8,17 @@ const app = express();
 
 mongoose.connect('mongodb://0.0.0.0:27017/mestodb')
   .then(() => {
-    console.log('Подключился к БД :-)');
+    console.log('connect with DB mestodb');
   })
   .catch(() => {
-    console.log('Ошибка при подключении к БД :-(');
+    console.log('Error connection with DB mestodb');
   });
 
-app.use(express.static(path.join(__dirname, 'public')))
+//app.use(express.static(path.join(__dirname, 'public')))
 
-app.get('/', (req, res) => {
-  res.send('hi')
-});
+// app.get('/', (req, res) => {
+//   res.send('hi')
+// });
 
 
 
