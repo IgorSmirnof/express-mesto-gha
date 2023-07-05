@@ -1,5 +1,8 @@
+const User = require('../models/user')
+
 function getUsers(req, res) {
-  res.send(users);
+  return User.find({}).then(users => res.status(200).send(users));
+  // res.send(users);
 }
 
 function getUser(req, res) {
@@ -10,7 +13,11 @@ function getUser(req, res) {
 
 function createUser(req, res) {
   console.log(req.body);
-  res.status(201).send(req.body);
+  return User.create({ ...req.body })
+    .then(user => {
+      res.status(201).send(user);
+    })
+
 }
 
 module.exports = {
