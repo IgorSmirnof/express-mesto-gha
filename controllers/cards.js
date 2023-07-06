@@ -35,8 +35,8 @@ function likeCard(req, res) {
   const { cardId } = req.params;
   const { userId } = req.user;
 
-  Card  //https://my-js.org/docs/guide/mongoose/
-    .findByIdAndUpdate(cardId, { $push:{ likes: userId } }, { new: true })
+  Card  //https://my-js.org/docs/guide/mongoose/   ---> $push $remove
+    .findByIdAndUpdate(cardId, { $addToSet:{ likes: userId } }, { new: true })
     .then((card) => { if (card) return res.send(card) })
     .catch((err) => { err });
 }
@@ -46,7 +46,7 @@ function dislikeCard(req, res) {
   const { userId } = req.user;
 
   Card
-    .findByIdAndUpdate(cardId, { $remove: { likes: userId } }, { new: true })
+    .findByIdAndUpdate(cardId, { $pull: { likes: userId } }, { new: true })
     .then((card) => { if (card) return res.send(card) })
     .catch((err) => { err });
 }
