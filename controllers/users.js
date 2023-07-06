@@ -7,8 +7,11 @@ function getUsers(req, res) {
 
 function getUser(req, res) {
   const { id } = req.params;
-  const user = users.find(user => user._id === id)
-  res.send(user);
+  // const user = User.find(user => user._id === id)
+  console.log(id)
+  //const user = User.find(user => user._id === id)
+
+  res.send(User._id);
 }
 
 function createUser(req, res) {

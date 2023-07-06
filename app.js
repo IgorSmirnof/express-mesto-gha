@@ -19,13 +19,16 @@ mongoose
 const app = express();
 
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '64a5c6739465b4fa2340f175' // вставьте сюда _id созданного в предыдущем пункте пользователя
-  };
+// app.use((req, res, next) => {
+//   req.user = {
+//     _id: '64a5c6739465b4fa2340f175' // вставьте сюда _id созданного в предыдущем пункте пользователя
+//   };
 
-  next();
-});
+//   next();
+// });
+// module.exports.createCard = (req, res) => {
+//   console.log(req.user._id); // _id станет доступен
+// };
 
 //console.log('')
 //app.use(express.static(path.join(__dirname, 'public')))
