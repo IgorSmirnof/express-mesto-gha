@@ -5,7 +5,7 @@ const router = require('express').Router();
 router.get('/', getUsers);
 router.get('/:id', getUser);
 router.post('/', createUser);
-router.patch('/users/me', updateProfile);
-router.patch('/users/me/avatar', updateAvatar);
+router.patch('/me', updateProfile);
+router.patch('/me/avatar', updateAvatar);
 
 module.exports = router;

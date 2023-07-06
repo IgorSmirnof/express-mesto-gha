@@ -9,14 +9,15 @@ function getUser(req, res) {
   const { id } = req.params;
   return User
     .findById(id)
-    .then((user) => { res.send({ user }) })
+    .then((user) => { res.send({ user }); throw (console.log('Пользователь с таким id не найден')); })
     .catch((err) => {
-      if (!user) {
-        next(console.log(`Пользователь по указанному id: ${id} не найден.`));
-      } else if (err.code === 500) {
+      // if (!user) {
+      //   next(console.log(`Пользователь по указанному id: ${id} не найден.`));
+      // } else
+        if (err.code === 500) {
         next(console.log(err.mesage));
       } else {
-        next(err);
+        console.log(err);
       }
     });
 }
@@ -26,7 +27,10 @@ function createUser(req, res) {
   //const { userId } = req.user;
   return User
     .create({ name, about, avatar })
-    .then((user) => { res.status(201).send(user) })
+    .then((user) => {
+      const { _id } = user;
+      res.status(201).send(name, about, avatar, _id)
+    })
     .catch((err) => {
       if (err.code === 400) {
         next(console.log('Переданы некорректные данные при создании пользователя.'));
