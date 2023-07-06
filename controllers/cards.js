@@ -16,8 +16,6 @@ function deleteCard(req, res) {
     .findById({ _id: cardId })
     .then(card => card._id === id)
     .catch((err) => { err });
-  // console.log(id)
-  //const user = User.find(user => user._id === id)
 
   res.send(Card._id);
 }
