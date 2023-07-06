@@ -9,14 +9,33 @@ function getUser(req, res) {
   const { id } = req.params;
   return User
     .findById(id)
-    .then((user) => {res.send({ user }) })
+    .then((user) => { res.send({ user }) })
+    .catch((err) => {
+      if (!user) {
+        next(console.log(`Пользователь по указанному id: ${id} не найден.`));
+      } else if (err.code === 500) {
+        next(console.log(err.mesage));
+      } else {
+        next(err);
+      }
+    });
 }
 
 function createUser(req, res) {
-  console.log(req.body);
+  const { name, about, avatar } = req.body;
+  //const { userId } = req.user;
   return User
-    .create({ ...req.body })
-    .then((user) => {res.status(201).send(user) });
+    .create({ name, about, avatar })
+    .then((user) => { res.status(201).send(user) })
+    .catch((err) => {
+      if (err.code === 400) {
+        next(console.log('Переданы некорректные данные при создании пользователя.'));
+      } else if (err.code === 500) {
+        next(console.log(err.mesage));
+      } else {
+        next(err);
+      }
+    });
 }
 
 function updateProfile(req, res) {
