@@ -6,6 +6,8 @@ const { PORT = 3000 } = process.env;
 const bodyParser = require('body-parser');
 const routes = require('./routes/router');
 
+const app = express();
+app.use(routes);
 //mongodb://localhost:27017  mongodb://127.0.0.1:27017
 mongoose
   .connect('mongodb://127.0.0.1:27017/mestodb')
@@ -16,7 +18,7 @@ mongoose
     console.log('Error connection with DB mestodb');
   });
 
-const app = express();
+
 
 
 // app.use((req, res, next) => {
@@ -38,7 +40,6 @@ const app = express();
 // });
 
 app.use(bodyParser.json());
-app.use(routes);
 
 app.listen(PORT, () => {
   console.log(`Application is running on port ${PORT}`)

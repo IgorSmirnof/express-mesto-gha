@@ -1,71 +1,85 @@
+// const { application } = require("express");
 const User = require("../models/user");
 
 function getUsers(_req, res) {
-  return User.find({}).then((users) => res.status(200).send(users));
-  // res.send(users);
+// res.send('test route getUsers')
+  return User.find({})
+    .then((users) => res.status(200).send(users))
+    .catch((err) => {
+      if (err.name == "CastError") {
+        res.send(`400 - Переданы некорректные данные при создании пользователя. `);
+      } else {
+        res.send('500 — Ошибка по умолчанию.');
+      }
+    });
 }
 
 function getUser(req, res) {
+  // res.send('test route getUser')
   const { id } = req.params;
-  return User
+  User
     .findById(id)
-    .then((user) => { res.send({ user }); throw (console.log('Пользователь с таким id не найден')); })
+    .then((user) => res.status(200).send(user))
     .catch((err) => {
-      // if (!user) {
-      //   next(console.log(`Пользователь по указанному id: ${id} не найден.`));
-      // } else
-        if (err.code === 500) {
-        next(console.log(err.mesage));
+      if (err.name == "CastError") {
+        res.send(`404 - Пользователь по указанному id: ${id} не найден.`);
       } else {
-        console.log(err);
+        res.send('500 — Ошибка по умолчанию.');
       }
     });
 }
 
-function createUser(req, res) {
-  const { name, about, avatar } = req.body;
-  //const { userId } = req.user;
-  return User
-    .create({ name, about, avatar })
-    .then((user) => {
-      const { _id } = user;
-      res.status(201).send(name, about, avatar, _id)
-    })
-    .catch((err) => {
-      if (err.code === 400) {
-        next(console.log('Переданы некорректные данные при создании пользователя.'));
-      } else if (err.code === 500) {
-        next(console.log(err.mesage));
-      } else {
-        next(err);
-      }
-    });
+function createUser(req, res, next) {
+  res.send('test route createUser')
+
+  // console.log(req.body)
+  // const { name, about, avatar } = req.body;
+  // //const { userId } = req.user;
+  // User
+  //   .create({ name, about, avatar })
+  //   .then((user) => {res.send({ data: user })
+  //     // const { _id } = user;
+  //     // res.status(201).send(name, about, avatar, _id)
+  //   })
+  //   .catch((err) => {
+  //     if (err.code === 400) {
+  //       next(console.log('Переданы некорректные данные при создании пользователя.'));
+  //     } else if (err.name === 500) {
+  //       next(console.log(err.message));
+  //     } else {
+  //       next(err);
+  //     }
+  //   });
 }
 
 function updateProfile(req, res) {
-  const { name, about } = req.body;
-  const { userId } = req.user;
+  res.send('test route updateProfile')
 
-  return User
-    .findByIdAndUpdate(userId, { name, about }, { new: true })
-    .then(
-    (user) => {
-      res.status(201).send(user);
-    }
-  );
+  // const { name, about } = req.body;
+  // const { userId } = req.user;
+
+  // return User
+  //   .findByIdAndUpdate(userId, { name, about }, { new: true })
+  //   .then(
+  //   (user) => {
+  //     res.status(201).send(user);
+  //   }
+  // );
 }
 
 function updateAvatar(req, res) {
-  const { avatar } = req.body;
-  const { userId } = req.user;
+  res.send('test route updateAvatar')
 
-  return User
-    .findByIdAndUpdate(userId, { avatar }, { new: true })
-    .then(
-    (user) => {
-      res.status(201).send(user);
-    }
-  );
+  // const { avatar } = req.body;
+  // const { userId } = req.user;
+
+  // return User
+  //   .findByIdAndUpdate(userId, { avatar }, { new: true })
+  //   .then(
+  //   (user) => {
+  //     res.status(201).send(user);
+  //   }
+  // );
 }
 
 module.exports = {
