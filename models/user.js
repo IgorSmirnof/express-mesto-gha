@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      default: 'Янотт',
+      default: 'Янотт3',
       validate: {
         validator: (str) => validatorJS.isLength(str, { min: 2, max: 30 }),
         message: 'Поле должно быть длиной от 2 до 30 символов',
