@@ -47,7 +47,7 @@ function createUser(req, res, next) {
   // const { userId } = req.user;
   User
     .create({ name, about, avatar })
-    .then((user) => {res.status(201).send(name, about, avatar)
+    .then((user) => {res.status(201).json(name, about, avatar)
       // const { _id } = user;
       // res.status(201).send(name, about, avatar, _id)
     })
