@@ -1,6 +1,6 @@
 
 const User = require("../models/user");
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const { handleDataError, handleNonFindError, handleDefaultError } = require('../utils/erroresConstans')
 
 function getUsers(_req, res) {
