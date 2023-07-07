@@ -53,18 +53,25 @@ function createUser(req, res, next) {
 }
 
 function updateProfile(req, res) {
-  res.send('test route updateProfile')
+  // res.send('test route updateProfile')
 
-  // const { name, about } = req.body;
-  // const { userId } = req.user;
+  console.log(req.body)
+  const { name, about } = req.body;
+  const { userId } = req.user;
 
-  // return User
-  //   .findByIdAndUpdate(userId, { name, about }, { new: true })
-  //   .then(
-  //   (user) => {
-  //     res.status(201).send(user);
-  //   }
-  // );
+  User
+    .findByIdAndUpdate(userId, { name, about }, { new: true })
+    .then(
+    (user) => {
+      res.status(201).send(user);
+    })
+    .catch((err) => {
+    if (err.name == "CastError") {
+      res.send(`400 - Переданы некорректные данные при обновлении профиля. Пользователь по указанному id: ${id} не найден.`)
+    } else {
+      res.send('500 — Ошибка по умолчанию.');
+    }
+  });
 }
 
 function updateAvatar(req, res) {
