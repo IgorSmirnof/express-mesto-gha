@@ -1,5 +1,7 @@
 // const { application } = require("express");
 const User = require("../models/user");
+const NotFindPage = require('../utils/NotFindPage')
+const { handleDataError, handleNonFindError, handleDefaultError } = require('../utils/erroresConstans')
 
 function getUsers(_req, res) {
 // res.send('test route getUsers')
@@ -7,7 +9,8 @@ function getUsers(_req, res) {
     .then((users) => res.status(200).send(users))
     .catch((err) => {
       if (err.name == "CastError") {
-        res.send(`400 - Переданы некорректные данные при создании пользователя. `);
+        handleDataError(err, res) ;
+        // res.send(`400 - Переданы некорректные данные при создании пользователя. `);
       } else {
         res.send('500 — Ошибка по умолчанию.');
       }
@@ -19,13 +22,18 @@ function getUser(req, res) {
   const { id } = req.params;
   User
     .findById(id)
-    .then((user) => res.status(200).send(user))
+    .then((user) => { if (user) return res.status(200).send(user) ;
+      // throw res.send(new NotFindPage('Пользователь с таким id не найден'));
+    })
     .catch((err) => {
-      if (err.name == "CastError") {
-        res.send(`404 - Пользователь по указанному id: ${id} не найден.`);
-      } else {
-        res.send('500 — Ошибка по умолчанию.');
-      }
+      handleDefaultError(err, res) ;
+
+      // if (err.name == "CastError") {
+      //   // res.send(new NotFindPage(`Пользователь по указанному id: ${id} не найден.`));
+
+      // } else {
+      //   res.send('500 — Ошибка по умолчанию.');
+      // }
     });
 }
 
