@@ -3,13 +3,13 @@ const mongoose = require('mongoose');
 
 const { PORT = 3000 } = process.env;
 
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const routes = require('./routes/router');
 
 const app = express();
 
-// app.use(express.json());
-app.use(bodyParser.json());
+app.use(express.json());
+// app.use(bodyParser.json());
 
 app.use((req, res, next) => {
   req.user = {

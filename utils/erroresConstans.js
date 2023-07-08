@@ -29,6 +29,9 @@ module.exports = {
   handleDataError,
   handleNonFindError,
   handleDefaultError,
+  NOT_CORRECT_DATA_ERROR_CODE,
+  NOT_FIND_ERROR_CODE,
+  DEFAULT_ERROR_CODE,
   SUCCESS_CODE,
   CREATE_CODE,
 };

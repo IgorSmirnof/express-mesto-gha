@@ -1,7 +1,7 @@
 const User = require('../models/user');
 // const bodyParser = require('body-parser');
 const {
-  handleDataError, handleNonFindError, handleDefaultError, SUCCESS_CODE, CREATE_CODE,
+  handleDataError, handleNonFindError, handleDefaultError, NOT_CORRECT_DATA_ERROR_CODE, DEFAULT_ERROR_CODE, SUCCESS_CODE, CREATE_CODE,
 } = require('../utils/erroresConstans');
 
 function getUsers(_req, res) {
@@ -43,7 +43,6 @@ function createUser(req, res) {
   // res.send('test route createUser')
   const { name, about, avatar } = req.body;
   console.log(name, about, avatar);
-  // const { userId } = req.user;
   User
     .create({ name, about, avatar })
     .then((user) => {
@@ -53,26 +52,20 @@ function createUser(req, res) {
       });
     })
     .catch((err) => {
-      console.log(err.code);
-      if (err.code === 400) {
-        handleDataError(err, res);
-        // next(console.log('Переданы некорректные данные при создании пользователя.'));
-      } else if (err.name === 500) {
-        handleDefaultError(err, res);
+      if (err.name === 'ValidationError') {
+        res
+          .status(NOT_CORRECT_DATA_ERROR_CODE)
+          .send({ message: 'Переданы некорректные данные.', error: err.message });
       } else {
-        // next(err);
-        handleDefaultError(err, res);
+        res
+          .status(DEFAULT_ERROR_CODE)
+          .send({ message: 'На сервере произошла ошибка.', error: err.message });
       }
     });
 }
 
 function updateProfile(req, res) {
-  // res.send('test route updateProfile')
-
-  // console.log(req.body)
   const { name, about } = req.body;
-  // const { userId } = req.user._id;
-  // console.log(userId, name, about)
   User
     .findByIdAndUpdate(req.user._id, { name, about }, { new: true })
     .then(
@@ -81,13 +74,14 @@ function updateProfile(req, res) {
       },
     )
     .catch((err) => {
-      if (err.name === 'CastError') {
-        handleDataError(err, res);
-      // res.send(`400 - Переданы некорректные данные при обновлении профиля.
-      // Пользователь по указанному id: ${ id } не найден.`)
+      if (err.name === 'ValidationError') {
+        res
+          .status(NOT_CORRECT_DATA_ERROR_CODE)
+          .send({ message: 'Переданы некорректные данные.', error: err.message });
       } else {
-        handleDefaultError(err, res);
-      // res.send('500 — Ошибка по умолчанию.');
+        res
+          .status(DEFAULT_ERROR_CODE)
+          .send({ message: 'На сервере произошла ошибка.', error: err.message });
       }
     });
 }
@@ -109,14 +103,15 @@ function updateAvatar(req, res) {
       },
     )
     .catch((err) => {
-      console.log(err);
-      handleDefaultError(err, res);
-      //   if (err.name == "CastError") {
-      //     handleDataError(err, res) ;
-      //   } else {
-      //     handleDefaultError(err, res) ;// ('500 — Ошибка по умолчанию.');
-
-      // }
+      if (err.name === 'ValidationError') {
+        res
+          .status(NOT_CORRECT_DATA_ERROR_CODE)
+          .send({ message: 'Переданы некорректные данные.', error: err.message });
+      } else {
+        res
+          .status(DEFAULT_ERROR_CODE)
+          .send({ message: 'На сервере произошла ошибка.', error: err.message });
+      }
     });
 }
 
