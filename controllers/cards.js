@@ -1,6 +1,6 @@
 const Card = require('../models/card');
 const {
-  NOT_CORRECT_DATA_ERROR_CODE, DEFAULT_ERROR_CODE, SUCCESS_CODE, NOT_FIND_ERROR_CODE,
+  NOT_CORRECT_DATA_ERROR_CODE, CREATE_CODE, DEFAULT_ERROR_CODE, SUCCESS_CODE, NOT_FIND_ERROR_CODE,
 } = require('../utils/erroresConstans');
 
 function getCards(_req, res) {
@@ -28,7 +28,7 @@ function createCard(req, res) {
   const { name, link } = req.body;
   return Card
     .create({ name, link, owner: req.user })
-    .then((card) => res.status(201).send({ card }))
+    .then((card) => res.status(CREATE_CODE).send({ card }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res
@@ -38,14 +38,33 @@ function createCard(req, res) {
     });
 }
 
+// const checkCardId = (card, res) => {
+//   if (card) {
+//     console.log('test', card);
+//     return res.status(SUCCESS_CODE).send(card);
+//   }
+//   console.log(card);
+//   return res.send(card);
+//     // .status(NOT_FIND_ERROR_CODE)
+//     // .send({ message: 'Карточка с таким id не найдена' });
+// };
+
 function likeCard(req, res) {
   const { cardId } = req.params;
-  const { userId } = req.user;
-
-  Card // https://my-js.org/docs/guide/mongoose/   ---> $push $remove
-    .findByIdAndUpdate(cardId, { $addToSet: { likes: userId } }, { new: true })
-    .then((card) => { if (card) return res.send(card); })
-    .catch((err) => { err; });
+  // const { userId } = req.user;
+  // console.log(cardId, userId);
+  Card
+    .findByIdAndUpdate(cardId, { $addToSet: { likes: req.user } }, { new: true })
+    // .then((card) => res.send(card))
+    // .then((card) => { if (card) res.send(card); })
+    .then((card) => res.send(card)) //checkCardId(card, res)
+    .catch((err) => {
+      // if (err.name === 'ValidationError') {
+      res
+        .status(NOT_CORRECT_DATA_ERROR_CODE)
+        .send({ message: 'Переданы некорректные данные.', error: err.message });
+    });
+    // });
 }
 
 function dislikeCard(req, res) {
