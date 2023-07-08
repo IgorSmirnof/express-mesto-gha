@@ -7,7 +7,7 @@ const {
 function getUsers(_req, res) {
 // res.send('test route getUsers')
   return User.find({})
-    .then((users) => res.status(CREATE_CODE).send(users))
+    .then((users) => res.status(SUCCESS_CODE).send(users))
     .catch((err) => {
       if (err.name === 'CastError') {
         handleDataError(err, res);
@@ -53,6 +53,7 @@ function createUser(req, res) {
       });
     })
     .catch((err) => {
+      console.log(err.code);
       if (err.code === 400) {
         handleDataError(err, res);
         // next(console.log('Переданы некорректные данные при создании пользователя.'));

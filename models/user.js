@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
+      required: true,
       default: 'Янотт3',
       validate: {
         validator: (str) => validatorJS.isLength(str, { min: 2, max: 30 }),
@@ -14,6 +15,7 @@ const userSchema = new mongoose.Schema(
 
     about: {
       type: String,
+      required: true,
       default: 'Исследователь еды',
       validate: {
         validator: (str) => validatorJS.isLength(str, { min: 2, max: 30 }),
@@ -23,7 +25,8 @@ const userSchema = new mongoose.Schema(
 
     avatar: {
       type: String,
-      default: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyf_zOcxA8xzbXgSLrpyzuBNHQLLwxvJyyEA&usqp=CAU',
+      required: true,
+      // default: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyf_zOcxA8xzbXgSLrpyzuBNHQLLwxvJyyEA&usqp=CAU',
       validate: {
         validator: (url) => validatorJS.isURL(url),
         message: 'Введите корректный URL',
