@@ -10,6 +10,15 @@ const app = express();
 
 // app.use(express.json());
 app.use(bodyParser.json());
+
+app.use((req, res, next) => {
+  req.user = {
+    _id: '64a5c4969465b4fa2340f173' // вставьте сюда _id созданного в предыдущем пункте пользователя
+  };
+  // console.log('id:', req.user._id);
+  next();
+});
+
 app.use(routes);
 //mongodb://localhost:27017  mongodb://127.0.0.1:27017
 mongoose
@@ -24,13 +33,7 @@ mongoose
 
 
 
-// app.use((req, res, next) => {
-//   req.user = {
-//     _id: '64a5c6739465b4fa2340f175' // вставьте сюда _id созданного в предыдущем пункте пользователя
-//   };
 
-//   next();
-// });
 // module.exports.createCard = (req, res) => {
 //   console.log(req.user._id); // _id станет доступен
 // };
@@ -42,7 +45,7 @@ mongoose
 //   res.send('hi')
 // });
 
-app.use(bodyParser.json());
+//app.use(bodyParser.json());
 
 app.listen(PORT, () => {
   console.log(`Application is running on port ${PORT}`)

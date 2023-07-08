@@ -1,6 +1,8 @@
 const NOT_CORRECT_DATA_ERROR_CODE = 400;
 const NOT_FIND_ERROR_CODE = 404;
 const DEFAULT_ERROR_CODE = 500;
+const SUCCESS_CODE = 200;
+const CREATE_CODE = 201;
 
 const handleDataError = (err, res) => {
   const { statusCode = NOT_CORRECT_DATA_ERROR_CODE, message } = err;
@@ -27,4 +29,6 @@ module.exports = {
   handleDataError,
   handleNonFindError,
   handleDefaultError,
+  SUCCESS_CODE,
+  CREATE_CODE
 };
