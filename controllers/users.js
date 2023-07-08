@@ -71,7 +71,7 @@ function updateProfile(req, res) {
     // .then((user) => checkUserId(user, res))
     .then(
       (user) => {
-        res.status(SUCCESS_CODE).send(user); //, { name, about }
+        res.status(SUCCESS_CODE).send({ name, about }); //, { name, about }
       },
     )
     .catch((err) => {
