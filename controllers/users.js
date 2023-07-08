@@ -14,13 +14,13 @@ function getUsers(_req, res) {
     });
 }
 
-const checkUser = (user, res) => {
+const checkUserId = (user, res) => {
   if (user) {
     return res.status(SUCCESS_CODE).send(user);
   }
   return res
     .status(NOT_FIND_ERROR_CODE)
-    .send({ message: 'Пользователь с таким id не найден'});
+    .send({ message: 'Пользователь с таким id не найден' });
 };
 
 function getUser(req, res) {
@@ -28,11 +28,11 @@ function getUser(req, res) {
   const { id } = req.params;
   User
     .findById(id)
-    .then((user) => checkUser(user, res))
+    .then((user) => checkUserId(user, res))
     .catch((err) => {
       if (err) {
         res
-          .status(DEFAULT_ERROR_CODE)
+          .status(NOT_CORRECT_DATA_ERROR_CODE)
           .send({ message: 'На сервере произошла ошибка.', error: err.message });
       }
     });
@@ -69,7 +69,7 @@ function updateProfile(req, res) {
     .findByIdAndUpdate(req.user._id, { name, about }, { new: true })
     .then(
       (user) => {
-        res.status(SUCCESS_CODE).send(user);
+        res.status(SUCCESS_CODE).send({name, about});
       },
     )
     .catch((err) => {
