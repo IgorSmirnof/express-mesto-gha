@@ -30,5 +30,5 @@ module.exports = {
   handleNonFindError,
   handleDefaultError,
   SUCCESS_CODE,
-  CREATE_CODE
+  CREATE_CODE,
 };

@@ -1,21 +1,21 @@
-const Card = require('../models/card')
+const Card = require('../models/card');
 
 function getCards(_req, res) {
   return Card
     .find({})
-    .then(cards => res.status(200).send(cards))
-    .catch((err) => { err });
+    .then((cards) => res.status(200).send(cards))
+    .catch((err) => { err; });
   // res.send(users);
 }
 
 function deleteCard(req, res) {
   const { cardId } = req.params;
-  const { userId } = req.user; //isOwner?
+  const { userId } = req.user; // isOwner?
 
   Card
     .findById({ _id: cardId })
-    .then(card => card._id === id)
-    .catch((err) => { err });
+    .then((card) => card._id === id)
+    .catch((err) => { err; });
 
   res.send(Card._id);
 }
@@ -27,18 +27,18 @@ function createCard(req, res) {
 
   return Card
     .create({ name, link, userId })
-    .then(card => res.status(201).send(card))
-    .catch((err) => { err });
+    .then((card) => res.status(201).send(card))
+    .catch((err) => { err; });
 }
 
 function likeCard(req, res) {
   const { cardId } = req.params;
   const { userId } = req.user;
 
-  Card  //https://my-js.org/docs/guide/mongoose/   ---> $push $remove
-    .findByIdAndUpdate(cardId, { $addToSet:{ likes: userId } }, { new: true })
-    .then((card) => { if (card) return res.send(card) })
-    .catch((err) => { err });
+  Card // https://my-js.org/docs/guide/mongoose/   ---> $push $remove
+    .findByIdAndUpdate(cardId, { $addToSet: { likes: userId } }, { new: true })
+    .then((card) => { if (card) return res.send(card); })
+    .catch((err) => { err; });
 }
 
 function dislikeCard(req, res) {
@@ -47,15 +47,14 @@ function dislikeCard(req, res) {
 
   Card
     .findByIdAndUpdate(cardId, { $pull: { likes: userId } }, { new: true })
-    .then((card) => { if (card) return res.send(card) })
-    .catch((err) => { err });
+    .then((card) => { if (card) return res.send(card); })
+    .catch((err) => { err; });
 }
-
 
 module.exports = {
   getCards,
   deleteCard,
   createCard,
   likeCard,
-  dislikeCard
-}
+  dislikeCard,
+};

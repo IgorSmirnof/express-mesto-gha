@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const { ObjectId } = mongoose.Schema.Types;
 const validatorJS = require('validator');
 
@@ -7,7 +8,7 @@ const cardSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-      validate:  {
+      validate: {
         validator: (str) => validatorJS.isLength(str, { min: 2, max: 30 }),
         message: 'Название карточки от 2 до 30 символов',
       },
