@@ -9,13 +9,9 @@ function getUsers(_req, res) {
   return User.find({})
     .then((users) => res.status(SUCCESS_CODE).send(users))
     .catch((err) => {
-      if (err.name === 'CastError') {
-        handleDataError(err, res);
-        // res.send(`400 - Переданы некорректные данные при создании пользователя. `);
-      } else {
-        handleDefaultError(err, res);
-        // res.send('500 — Ошибка по умолчанию.');
-      }
+      res
+        .status(DEFAULT_ERROR_CODE)
+        .send({ message: 'На сервере произошла ошибка.', error: err.message });
     });
 }
 
@@ -25,16 +21,14 @@ function getUser(req, res) {
   User
     .findById(id)
     .then((user) => {
-      if (user) res.status(CREATE_CODE).send(user); // return
+      if (user) res.status(SUCCESS_CODE).send(user); // return
       // throw res.send(new NotFindPage('Пользователь с таким id не найден'));
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        // res.send(new NotFindPage(`Пользователь по указанному id: ${id} не найден.`));
-        handleNonFindError(err, res);
-      } else {
-      //   res.send('500 — Ошибка по умолчанию.');
-        handleDefaultError(err, res);
+      if (err) {
+        res
+          .status(NOT_CORRECT_DATA_ERROR_CODE)
+          .send({ message: 'Пользователь с таким id не найден.', error: err.message });
       }
     });
 }
