@@ -1,4 +1,7 @@
 const Card = require('../models/card');
+const {
+  NOT_CORRECT_DATA_ERROR_CODE, DEFAULT_ERROR_CODE, SUCCESS_CODE, NOT_FIND_ERROR_CODE,
+} = require('../utils/erroresConstans');
 
 function getCards(_req, res) {
   return Card
@@ -26,7 +29,13 @@ function createCard(req, res) {
   return Card
     .create({ name, link, owner: req.user })
     .then((card) => res.status(201).send({ card }))
-    .catch((err) => err.name);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res
+          .status(NOT_CORRECT_DATA_ERROR_CODE)
+          .send({ message: 'Переданы некорректные данные.', error: err.message });
+      }
+    });
 }
 
 function likeCard(req, res) {
