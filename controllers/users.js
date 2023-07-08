@@ -1,7 +1,6 @@
 const User = require('../models/user');
 // const bodyParser = require('body-parser');
-const {
-  handleDataError, handleNonFindError, handleDefaultError, NOT_CORRECT_DATA_ERROR_CODE, DEFAULT_ERROR_CODE, SUCCESS_CODE, CREATE_CODE,
+const {NOT_CORRECT_DATA_ERROR_CODE, DEFAULT_ERROR_CODE, SUCCESS_CODE, CREATE_CODE, NOT_FIND_ERROR_CODE
 } = require('../utils/erroresConstans');
 
 function getUsers(_req, res) {
@@ -15,20 +14,26 @@ function getUsers(_req, res) {
     });
 }
 
+const checkUser = (user, res) => {
+  if (user) {
+    return res.status(SUCCESS_CODE).send(user);
+  }
+  return res
+    .status(NOT_FIND_ERROR_CODE)
+    .send({ message: 'Пользователь с таким id не найден'});
+};
+
 function getUser(req, res) {
   // res.send('test route getUser')
   const { id } = req.params;
   User
     .findById(id)
-    .then((user) => {
-      if (user) res.status(SUCCESS_CODE).send(user); // return
-      // throw res.send(new NotFindPage('Пользователь с таким id не найден'));
-    })
+    .then((user) => checkUser(user, res))
     .catch((err) => {
       if (err) {
         res
-          .status(NOT_CORRECT_DATA_ERROR_CODE)
-          .send({ message: 'Пользователь с таким id не найден.', error: err.message });
+          .status(DEFAULT_ERROR_CODE)
+          .send({ message: 'На сервере произошла ошибка.', error: err.message });
       }
     });
 }
