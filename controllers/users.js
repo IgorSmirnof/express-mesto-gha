@@ -1,7 +1,7 @@
 const User = require('../models/user');
 // const bodyParser = require('body-parser');
 const {
-  NOT_CORRECT_DATA_ERROR_CODE, DEFAULT_ERROR_CODE, SUCCESS_CODE, CREATE_CODE, NOT_FIND_ERROR_CODE,
+  NOT_CORRECT_DATA_ERROR_CODE, DEFAULT_ERROR_CODE, SUCCESS_CODE, NOT_FIND_ERROR_CODE,
 } = require('../utils/erroresConstans');
 
 function getUsers(_req, res) {
@@ -70,8 +70,8 @@ function updateProfile(req, res) {
     .findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     // .then((user) => checkUserId(user, res))
     .then(
-      (user) => {
-        res.status(SUCCESS_CODE).send({ name, about }); //, { name, about }
+      () => {
+        res.status(SUCCESS_CODE).send({ name, about });
       },
     )
     .catch((err) => {
@@ -88,9 +88,6 @@ function updateProfile(req, res) {
 }
 
 function updateAvatar(req, res) {
-  // console.log(req.user._id);
-  // res.send('test route updateAvatar')
-
   const { avatar } = req.body;
   // const { userId } = req.user._id;
 
@@ -99,8 +96,8 @@ function updateAvatar(req, res) {
   return User
     .findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .then(
-      (user) => {
-        res.status(SUCCESS_CODE).send(user);
+      () => {
+        res.status(SUCCESS_CODE).send({ avatar });
       },
     )
     .catch((err) => {
