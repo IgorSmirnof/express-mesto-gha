@@ -23,12 +23,10 @@ function deleteCard(req, res) {
 function createCard(req, res) {
   console.log(req.body);
   const { name, link } = req.body;
-  const { userId } = req.user;
-
   return Card
-    .create({ name, link, userId })
-    .then((card) => res.status(201).send(card))
-    .catch((err) => { err; });
+    .create({ name, link, owner: req.user })
+    .then((card) => res.status(201).send({ card }))
+    .catch((err) => err.name);
 }
 
 function likeCard(req, res) {
