@@ -13,14 +13,29 @@ function getCards(_req, res) {
 
 function deleteCard(req, res) {
   const { cardId } = req.params;
-  const { userId } = req.user; // isOwner?
+  //const { userId } = req.user; // isOwner?
 
   Card
     .findById({ _id: cardId })
-    .then((card) => card._id === id)
-    .catch((err) => { err; });
+    .then((card) => {
+      if (card) res.send(card);
+    })
+    .then(() => res.status(NOT_FIND_ERROR_CODE).send({ message: 'Карточка с указанным id не найдена' }))
+    // .then((card) => res.send(card)) //checkCardId(card, res)
+    .catch((err) => {
+      // res.send(err.message)
+      if (err.name === 'CastError') {
+        res
+          .status(NOT_CORRECT_DATA_ERROR_CODE)
+          .send({ message: 'Переданы некорректные данные.', error: err });
+      } else {
+        res
+          .status(DEFAULT_ERROR_CODE)
+          .send({ message: 'На сервере произошла ошибка.', error: err });
+      }
+    });
 
-  res.send(Card._id);
+  // res.send(Card._id);
 }
 
 function createCard(req, res) {
