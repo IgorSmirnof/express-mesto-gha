@@ -52,19 +52,27 @@ function createCard(req, res) {
 function likeCard(req, res) {
   const { cardId } = req.params;
   // const { userId } = req.user;
-  // console.log(cardId, userId);
+  // console.log(cardId);
   Card
     .findByIdAndUpdate(cardId, { $addToSet: { likes: req.user } }, { new: true })
-    // .then((card) => res.send(card))
-    // .then((card) => { if (card) res.send(card); })
-    .then((card) => res.send(card)) //checkCardId(card, res)
+    .then(console.log(cardId))
+    .then((card) => {
+      if (card) res.send(card);
+    })
+    .then(() => res.status(NOT_FIND_ERROR_CODE).send('Карточка с указанным id не найдена'))
+    // .then((card) => res.send(card)) //checkCardId(card, res)
     .catch((err) => {
-      // if (err.name === 'ValidationError') {
-      res
-        .status(NOT_CORRECT_DATA_ERROR_CODE)
-        .send({ message: 'Переданы некорректные данные.', error: err.message });
+      // res.send(err.message)
+      if (err.name === 'CastError') {
+        res
+          .status(NOT_CORRECT_DATA_ERROR_CODE)
+          .send({ message: 'Переданы некорректные данные.', error: err });
+      } else {
+        res
+          .status(DEFAULT_ERROR_CODE)
+          .send({ message: 'На сервере произошла ошибка.', error: err });
+      }
     });
-    // });
 }
 
 function dislikeCard(req, res) {
