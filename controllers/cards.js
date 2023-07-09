@@ -11,17 +11,26 @@ function getCards(_req, res) {
   // res.send(users);
 }
 
+
+// console.log('1st', cardId, req.params.cardId);
+//const { userId } = req.user; // isOwner?
+//console.log('findByIdAndDelete', cardId);
+// console.log('2nd', cardId);
+//console.log('1st', card);
+//{ message: 'Карточка с указанным id удалена' }
+
 function deleteCard(req, res) {
   const { cardId } = req.params;
-  //const { userId } = req.user; // isOwner?
-
   Card
-    .findById({ _id: cardId })
-    .then((card) => {
-      if (card) res.send(card);
+    // .findById({ _id: cardId })
+    .findByIdAndDelete(cardId)
+    .then((data) => {
+      if (data) {
+        return res.status(SUCCESS_CODE).send({ message: 'Карточка с указанным id удалена' });
+      } else {
+        return res.status(NOT_CORRECT_DATA_ERROR_CODE).send({ message: 'Карточка с указанным id не существует' });
+      }
     })
-    .then(() => res.status(NOT_FIND_ERROR_CODE).send({ message: 'Карточка с указанным id не найдена' }))
-    // .then((card) => res.send(card)) //checkCardId(card, res)
     .catch((err) => {
       // res.send(err.message)
       if (err.name === 'CastError') {
@@ -33,6 +42,7 @@ function deleteCard(req, res) {
           .status(DEFAULT_ERROR_CODE)
           .send({ message: 'На сервере произошла ошибка.', error: err });
       }
+      res.end();
     });
 
   // res.send(Card._id);
