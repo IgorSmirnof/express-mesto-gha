@@ -28,7 +28,7 @@ function deleteCard(req, res) {
       if (data) {
         return res.status(SUCCESS_CODE).send({ message: 'Карточка с указанным id удалена' });
       } else {
-        return res.status(NOT_CORRECT_DATA_ERROR_CODE).send({ message: 'Карточка с указанным id не существует' });
+        return res.status(NOT_FIND_ERROR_CODE).send({ message: 'Карточка с указанным id не существует' });
       }
     })
     .catch((err) => {
