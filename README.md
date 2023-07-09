@@ -1,16 +1,14 @@
-[![Tests](../../actions/workflows/tests-13-sprint.yml/badge.svg)](../../actions/workflows/tests-13-sprint.yml) [![Tests](../../actions/workflows/tests-14-sprint.yml/badge.svg)](../../actions/workflows/tests-14-sprint.yml)
+[![Tests](../../actions/workflows/tests-13-sprint.yml/badge.svg)](../../actions/workflows/tests-13-sprint.yml)
+
 # Проект Mesto фронтенд + бэкенд
 
+## Создать сервер для Mesto. В процессе научиться 
 
-## Директории
+### работать с базами данных, 
+### разбираться в безопасности и тестировании, и 
+### разворачивать бэкенд на удалённой машине. 
 
-`/routes` — папка с файлами роутера  
-`/controllers` — папка с файлами контроллеров пользователя и карточки   
-`/models` — папка с файлами описания схем пользователя и карточки  
-  
-Остальные директории вспомогательные, создаются при необходимости разработчиком
 
-## Запуск проекта
+## Проект размещен GH: [Ссылка на GH](https://github.com/IgorSmirnof/express-mesto-gha)
 
-`npm run start` — запускает сервер   
-`npm run dev` — запускает сервер с hot-reload
+
