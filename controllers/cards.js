@@ -55,11 +55,11 @@ function likeCard(req, res) {
   // console.log(cardId);
   Card
     .findByIdAndUpdate(cardId, { $addToSet: { likes: req.user } }, { new: true })
-    .then(console.log(cardId))
+    // .then(console.log(cardId))
     .then((card) => {
       if (card) res.send(card);
     })
-    .then(() => res.status(NOT_FIND_ERROR_CODE).send('Карточка с указанным id не найдена'))
+    .then(() => res.status(NOT_FIND_ERROR_CODE).send({ message: 'Карточка с указанным id не найдена' }))
     // .then((card) => res.send(card)) //checkCardId(card, res)
     .catch((err) => {
       // res.send(err.message)
@@ -77,12 +77,25 @@ function likeCard(req, res) {
 
 function dislikeCard(req, res) {
   const { cardId } = req.params;
-  const { userId } = req.user;
+  // const { userId } = req.user;
 
   Card
-    .findByIdAndUpdate(cardId, { $pull: { likes: userId } }, { new: true })
-    .then((card) => { if (card) return res.send(card); })
-    .catch((err) => { err; });
+    .findByIdAndUpdate(cardId, { $pull: { likes: req.user } }, { new: true })
+    .then((card) => {
+      if (card) res.send(card);
+    })
+    .then(() => res.status(NOT_FIND_ERROR_CODE).send({ message: 'Карточка с указанным id не найдена' }))
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res
+          .status(NOT_CORRECT_DATA_ERROR_CODE)
+          .send({ message: 'Переданы некорректные данные.', error: err });
+      } else {
+        res
+          .status(DEFAULT_ERROR_CODE)
+          .send({ message: 'На сервере произошла ошибка.', error: err });
+      }
+    });
 }
 
 module.exports = {
