@@ -6,18 +6,13 @@ const {
 function getCards(_req, res) {
   return Card
     .find({})
-    .then((cards) => res.status(200).send(cards))
-    .catch((err) => { err; });
-  // res.send(users);
+    .then((cards) => res.status(SUCCESS_CODE).send(cards))
+    .catch((err) => {
+      res
+        .status(DEFAULT_ERROR_CODE)
+        .send({ message: 'На сервере произошла ошибка.', error: err });
+    });
 }
-
-
-// console.log('1st', cardId, req.params.cardId);
-//const { userId } = req.user; // isOwner?
-//console.log('findByIdAndDelete', cardId);
-// console.log('2nd', cardId);
-//console.log('1st', card);
-//{ message: 'Карточка с указанным id удалена' }
 
 function deleteCard(req, res) {
   const { cardId } = req.params;
@@ -27,12 +22,10 @@ function deleteCard(req, res) {
     .then((data) => {
       if (data) {
         return res.status(SUCCESS_CODE).send({ message: 'Карточка с указанным id удалена' });
-      } else {
-        return res.status(NOT_FIND_ERROR_CODE).send({ message: 'Карточка с указанным id не существует' });
       }
+      return res.status(NOT_FIND_ERROR_CODE).send({ message: 'Карточка с указанным id не существует' });
     })
     .catch((err) => {
-      // res.send(err.message)
       if (err.name === 'CastError') {
         res
           .status(NOT_CORRECT_DATA_ERROR_CODE)
@@ -44,8 +37,6 @@ function deleteCard(req, res) {
       }
       res.end();
     });
-
-  // res.send(Card._id);
 }
 
 function createCard(req, res) {
@@ -63,31 +54,15 @@ function createCard(req, res) {
     });
 }
 
-// const checkCardId = (card, res) => {
-//   if (card) {
-//     console.log('test', card);
-//     return res.status(SUCCESS_CODE).send(card);
-//   }
-//   console.log(card);
-//   return res.send(card);
-//     // .status(NOT_FIND_ERROR_CODE)
-//     // .send({ message: 'Карточка с таким id не найдена' });
-// };
-
 function likeCard(req, res) {
   const { cardId } = req.params;
-  // const { userId } = req.user;
-  // console.log(cardId);
   Card
     .findByIdAndUpdate(cardId, { $addToSet: { likes: req.user } }, { new: true })
-    // .then(console.log(cardId))
     .then((card) => {
       if (card) res.send(card);
     })
     .then(() => res.status(NOT_FIND_ERROR_CODE).send({ message: 'Карточка с указанным id не найдена' }))
-    // .then((card) => res.send(card)) //checkCardId(card, res)
     .catch((err) => {
-      // res.send(err.message)
       if (err.name === 'CastError') {
         res
           .status(NOT_CORRECT_DATA_ERROR_CODE)
@@ -102,8 +77,6 @@ function likeCard(req, res) {
 
 function dislikeCard(req, res) {
   const { cardId } = req.params;
-  // const { userId } = req.user;
-
   Card
     .findByIdAndUpdate(cardId, { $pull: { likes: req.user } }, { new: true })
     .then((card) => {
