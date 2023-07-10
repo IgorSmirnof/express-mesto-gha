@@ -1,6 +1,6 @@
 const User = require('../models/user');
 const {
-  NOT_CORRECT_DATA_ERROR_CODE, DEFAULT_ERROR_CODE, SUCCESS_CODE, NOT_FIND_ERROR_CODE,
+  NOT_CORRECT_DATA_ERROR_CODE, DEFAULT_ERROR_CODE, SUCCESS_CODE, NOT_FIND_ERROR_CODE, CREATE_CODE,
 } = require('../utils/erroresConstans');
 
 function getUsers(_req, res) {
@@ -13,22 +13,44 @@ function getUsers(_req, res) {
     });
 }
 
-const checkUserId = (user, res) => {
-  if (user) {
-    return res.status(SUCCESS_CODE).send(user);
-  }
-  return res
-    .status(NOT_FIND_ERROR_CODE)
-    .send({ message: 'Пользователь с таким id не найден' });
-};
+// const checkUserId = (user, res) => {
+//   if (user) {
+//     return res.status(SUCCESS_CODE).send(user);
+//   }
+//   return res
+//     .status(NOT_FIND_ERROR_CODE)
+//     .send({ message: 'Пользователь с таким id не найден' });
+// };
+
+// function getUser(req, res) {
+//   const { id } = req.params;
+//   User
+//     .findById(id)
+//     .then((user) => checkUserId(user, res))
+//     .catch((err) => {
+//       if (err) {
+//         res
+//           .status(NOT_CORRECT_DATA_ERROR_CODE)
+//           .send({ message: 'На сервере произошла ошибка.', error: err.message });
+//       }
+//     });
+// }
+
+// Спасибо за видео. я встреал orFail, но не разобрался как он работает.
+// С ним код выглятид лучше и становится читаемым. еще раз Спасибо!
 
 function getUser(req, res) {
   const { id } = req.params;
   User
     .findById(id)
-    .then((user) => checkUserId(user, res))
+    .orFail(new Error('NotValidId'))
+    .then((user) => res.status(SUCCESS_CODE).send(user))
     .catch((err) => {
-      if (err) {
+      if (err.message === 'NotValidId') {
+        res
+          .status(NOT_FIND_ERROR_CODE)
+          .send({ message: 'Пользователь с таким id не найден' });
+      } else {
         res
           .status(NOT_CORRECT_DATA_ERROR_CODE)
           .send({ message: 'На сервере произошла ошибка.', error: err.message });
@@ -42,7 +64,7 @@ function createUser(req, res) {
     .create({ name, about, avatar })
     .then((user) => {
       const { _id } = user;
-      res.status(SUCCESS_CODE).send({
+      res.status(CREATE_CODE).send({
         name, about, avatar, _id,
       });
     })

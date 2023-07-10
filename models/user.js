@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema(
       match: /(https?:\/\/.*\.(?:png|jpg|bmp|webp))/i,
     },
   },
-
+  { versionKey: false },
 );
 
 module.exports = mongoose.model('user', userSchema);
