@@ -4,10 +4,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 
-const { PORT = process.env.PORT_APP, DB_URL = process.env.DB_URL_APP } = process.env;
-// const PORT = process.env.PORT_APP;
-// const DB_URL = process.env.DB_URL_APP;
-// const USER_ID = process.env.USER_ID_APP;
+// const { PORT = process.env.PORT_APP, DB_URL = process.env.DB_URL_APP } = process.env;
+const PORT = 3000;
+const DB_URL = 'mongodb://127.0.0.1:27017/mestodb';
+const USER_ID = '64a5c4969465b4fa2340f173';
 
 const routes = require('./routes');
 
@@ -19,8 +19,7 @@ app.use(express.json());
 
 app.use((req, res, next) => {
   req.user = {
-    _id: '64a5c4969465b4fa2340f173',
-    // _id: USER_ID_APP,
+    _id: USER_ID,
   };
   next();
 });
