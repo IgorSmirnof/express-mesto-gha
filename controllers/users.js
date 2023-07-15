@@ -1,3 +1,5 @@
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const {
   NOT_CORRECT_DATA_ERROR_CODE, DEFAULT_ERROR_CODE, SUCCESS_CODE, NOT_FIND_ERROR_CODE, CREATE_CODE,
@@ -59,13 +61,17 @@ function getUser(req, res) {
 }
 
 function createUser(req, res) {
-  const { name, about, avatar } = req.body;
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
   User
-    .create({ name, about, avatar })
+    .create({
+      name, about, avatar, email, password,
+    })
     .then((user) => {
       const { _id } = user;
       res.status(CREATE_CODE).send({
-        name, about, avatar, _id,
+        name, about, avatar, email, password, _id,
       });
     })
     .catch((err) => {
@@ -125,10 +131,42 @@ function updateAvatar(req, res) {
     });
 }
 
+function login(req, res) {
+  const { email, password } = req.params;
+  User
+    .findOne(email)
+    .orFail(new Error('NotFindEmail'))
+    .then((user) => bcrypt
+      .compare(password, user.password)
+      .then((matched) => {
+        if (!matched) {
+        // хеши не совпали — отклоняем промис
+          Promise.reject(new Error('Неправильные почта или пароль'));
+        }
+        // аутентификация успешна
+        const token = jwt.sign({ _id: user._id }, 'very-secret-key', { expiresIn: '7d' });
+        res.send({ token, user, message: 'Всё верно!' });
+      }))
+
+    // .then((user) => res.status(SUCCESS_CODE).send({email, password}))
+    .catch((err) => {
+      if (err.message === 'NotFindEmail') {
+        res
+          .status(NOT_FIND_ERROR_CODE)
+          .send({ message: 'Пользователь с таким email не найден' });
+      } else {
+        res
+          .status(NOT_CORRECT_DATA_ERROR_CODE)
+          .send({ message: 'На сервере произошла ошибка. login', error: err.message });
+      }
+    });
+}
+
 module.exports = {
   getUsers,
   getUser,
   createUser,
   updateProfile,
   updateAvatar,
+  login,
 };
