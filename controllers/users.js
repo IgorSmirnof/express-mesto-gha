@@ -32,13 +32,14 @@ function getUser(req, res) {
       } else {
         res
           .status(NOT_CORRECT_DATA_ERROR_CODE)
-          .send({ message: 'На сервере произошла ошибка.', error: err.message });
+          .send({ message: 'На сервере произошла ошибка. getUser', error: err.message });
       }
     });
 }
 
 function getCurrentUser(req, res) {
-  const { id } = req.params;
+  const { id } = req.body;
+  console.log('getCurrentUser: ', req.body);
   User
     .findById(id)
     .orFail(new Error('NotValidId'))
@@ -47,11 +48,11 @@ function getCurrentUser(req, res) {
       if (err.message === 'NotValidId') {
         res
           .status(NOT_FIND_ERROR_CODE)
-          .send({ message: 'Пользователь с таким id не найден' });
+          .send({ message: 'Пользователь с таким id не найден getCurrentUser' });
       } else {
         res
           .status(NOT_CORRECT_DATA_ERROR_CODE)
-          .send({ message: 'На сервере произошла ошибка.', error: err.message });
+          .send({ message: 'На сервере произошла ошибка.getCurrentUser', error: err.message });
       }
     });
 }
@@ -133,6 +134,7 @@ function login(req, res) {
   // console.log('entr:', password, email);
   User
     .findOne({ email })
+    .select('+password')
     .orFail(new Error('NotFindEmail'))
     .then((user) => {
       bcrypt
