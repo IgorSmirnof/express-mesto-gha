@@ -131,14 +131,14 @@ function updateAvatar(req, res) {
 
 function login(req, res) {
   const { email, password } = req.body;
-  // console.log('entr:', password, email);
+  console.log('entr:', password, email);
   User
     .findOne({ email })
     .select('+password')
-    .orFail(new Error('NotFindEmail'))
+    .orFail(() => new Error('NotFindEmail'))
     .then((user) => {
       bcrypt
-        .compare(password, user.password)
+        .compare(String(password), user.password)
         .then((matched) => {
           if (matched) {
             console.log('promis ok');
