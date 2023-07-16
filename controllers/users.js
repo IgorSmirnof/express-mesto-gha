@@ -2,10 +2,10 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const {
-  NOT_CORRECT_DATA_ERROR_CODE, DEFAULT_ERROR_CODE, SUCCESS_CODE
+  NOT_CORRECT_DATA_ERROR_CODE, DEFAULT_ERROR_CODE, SUCCESS_CODE,
 } = require('../utils/erroresConstans');
 const {
-  NOT_FIND_ERROR_CODE, CREATE_CODE, NOT_CORRECT_DATA
+  NOT_FIND_ERROR_CODE, CREATE_CODE, NOT_CORRECT_DATA,
 } = require('../utils/erroresConstans');
 
 function getUsers(_req, res) {
@@ -37,6 +37,24 @@ function getUser(req, res) {
     });
 }
 
+function getCurrentUser(req, res) {
+  const { id } = req.params;
+  User
+    .findById(id)
+    .orFail(new Error('NotValidId'))
+    .then((user) => res.status(SUCCESS_CODE).send(user))
+    .catch((err) => {
+      if (err.message === 'NotValidId') {
+        res
+          .status(NOT_FIND_ERROR_CODE)
+          .send({ message: 'Пользователь с таким id не найден' });
+      } else {
+        res
+          .status(NOT_CORRECT_DATA_ERROR_CODE)
+          .send({ message: 'На сервере произошла ошибка.', error: err.message });
+      }
+    });
+}
 function createUser(req, res) {
   const {
     name, about, avatar, email, password,
@@ -50,7 +68,7 @@ function createUser(req, res) {
     .then((user) => {
       // const { _id } = user;
       res.status(CREATE_CODE).send({
-        name, about, avatar, email, password,
+        email, password, name, about, avatar,
       });
     })
     .catch((err) => {
@@ -112,7 +130,7 @@ function updateAvatar(req, res) {
 
 function login(req, res) {
   const { email, password } = req.body;
-  //console.log('entr:', password, email);
+  // console.log('entr:', password, email);
   User
     .findOne({ email })
     .orFail(new Error('NotFindEmail'))
@@ -127,8 +145,8 @@ function login(req, res) {
           } else {
             res.status(NOT_CORRECT_DATA).send({ message: 'Неправильные почта или пароль. 000' });
           }
-        })
-      })
+        });
+    })
     .catch((err) => {
       if (err.message === 'NotFindEmail') {
         res
@@ -149,4 +167,5 @@ module.exports = {
   updateProfile,
   updateAvatar,
   login,
+  getCurrentUser,
 };
