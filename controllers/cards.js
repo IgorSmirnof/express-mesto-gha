@@ -14,29 +14,83 @@ function getCards(_req, res) {
     });
 }
 
+// function deleteCard(req, res) {
+//   const { cardId } = req.params;
+//   const userId = req.user._id;
+//   Card
+//     // .findById({ _id: cardId })
+//     .findByIdAndDelete(cardId)
+//     .orFail(new Error('NotValidId'))
+//     .then(() => res.status(SUCCESS_CODE).send({ message: 'Карточка с указанным id удалена' }))
+//     .catch((err) => {
+//       if (err.message === 'NotValidId') {
+//         res
+//           .status(NOT_FIND_ERROR_CODE)
+//           .send({ message: 'Карточка с указанным id не существует' });
+//       } else if (err.name === 'CastError') {
+//         res
+//           .status(NOT_CORRECT_DATA_ERROR_CODE)
+//           .send({ message: 'Переданы некорректные данные.', error: err });
+//       } else {
+//         res
+//           .status(DEFAULT_ERROR_CODE)
+//           .send({ message: 'На сервере произошла ошибка.', error: err });
+//       }
+//       res.end();
+//     });
+// }
+
 function deleteCard(req, res) {
   const { cardId } = req.params;
+  const userId = req.user._id;
+  console.log(userId);
   Card
-    // .findById({ _id: cardId })
-    .findByIdAndDelete(cardId)
+    .findById(cardId)
+    // .findByIdAndDelete(cardId)
     .orFail(new Error('NotValidId'))
-    .then(() => res.status(SUCCESS_CODE).send({ message: 'Карточка с указанным id удалена' }))
+    .then((card) => {
+      const cardOwner = card.owner.toString();
+      console.log(cardOwner, userId);
+      if (cardOwner === userId) {
+        card.deleteOne();
+        res.send({ card });
+      } else {
+        res.status(403).send({
+          message: 'Можно удалить только свою карточку',
+        });
+      }
+    }
+    )
     .catch((err) => {
       if (err.message === 'NotValidId') {
         res
           .status(NOT_FIND_ERROR_CODE)
           .send({ message: 'Карточка с указанным id не существует' });
-      } else if (err.name === 'CastError') {
-        res
-          .status(NOT_CORRECT_DATA_ERROR_CODE)
-          .send({ message: 'Переданы некорректные данные.', error: err });
       } else {
         res
-          .status(DEFAULT_ERROR_CODE)
-          .send({ message: 'На сервере произошла ошибка.', error: err });
+          .status(000)
+          .send({ message: '000' });
       }
-      res.end();
-    });
+    })
+
+
+    // .then(() => res.status(SUCCESS_CODE).send({ message: 'Карточка с указанным id удалена' }))
+    // .catch((err) => {
+    //   if (err.message === 'NotValidId') {
+    //     res
+    //       .status(NOT_FIND_ERROR_CODE)
+    //       .send({ message: 'Карточка с указанным id не существует' });
+    //   } else if (err.name === 'CastError') {
+    //     res
+    //       .status(NOT_CORRECT_DATA_ERROR_CODE)
+    //       .send({ message: 'Переданы некорректные данные.', error: err });
+    //   } else {
+    //     res
+    //       .status(DEFAULT_ERROR_CODE)
+    //       .send({ message: 'На сервере произошла ошибка.', error: err });
+    //   }
+    //   res.end();
+    // });
 }
 
 function createCard(req, res) {

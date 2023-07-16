@@ -6,10 +6,11 @@ const auth = (req, res, next) => {
   let payload;
   try {
     payload = jwt.verify(token, 'very-secret-key');
+    console.log(payload);
   } catch (err) {
     return res
       .status(NOT_CORRECT_DATA)
-      .send({ message: 'Необходима авторизация' });
+      .send({ message: 'Необходима авторизация auth' });
   }
   req.user = payload;
   next();

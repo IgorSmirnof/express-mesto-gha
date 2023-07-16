@@ -9,7 +9,7 @@ const notFoundRoutes = require('./notFound');
 router.post('/signin', login);
 router.post('/signup', createUser);
 
-router.use(auth);
+// router.use(auth);
 
 router.use('/users', usersRoutes);
 router.use('/cards', cardRoutes);
