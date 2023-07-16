@@ -69,7 +69,7 @@ function createUser(req, res) {
     .then((user) => {
       // const { _id } = user;
       res.status(CREATE_CODE).send({
-        email, password, name, about, avatar,
+        email, name, about, avatar,
       });
     })
     .catch((err) => {
@@ -79,7 +79,7 @@ function createUser(req, res) {
           .send({ message: 'Переданы некорректные данные.', error: err.message });
       } else {
         res
-          .status(DEFAULT_ERROR_CODE)
+          .status(NOT_CORRECT_DATA_ERROR_CODE)
           .send({ message: 'На сервере произошла ошибка.', error: err.message });
       }
     });
