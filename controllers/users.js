@@ -2,7 +2,10 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const {
-  NOT_CORRECT_DATA_ERROR_CODE, DEFAULT_ERROR_CODE, SUCCESS_CODE, NOT_FIND_ERROR_CODE, CREATE_CODE,
+  NOT_CORRECT_DATA_ERROR_CODE, DEFAULT_ERROR_CODE, SUCCESS_CODE
+} = require('../utils/erroresConstans');
+const {
+  NOT_FIND_ERROR_CODE, CREATE_CODE, NOT_CORRECT_DATA
 } = require('../utils/erroresConstans');
 
 function getUsers(_req, res) {
@@ -109,7 +112,7 @@ function updateAvatar(req, res) {
 
 function login(req, res) {
   const { email, password } = req.body;
-  console.log('entr:', password, email);
+  //console.log('entr:', password, email);
   User
     .findOne({ email })
     .orFail(new Error('NotFindEmail'))
@@ -117,23 +120,20 @@ function login(req, res) {
       bcrypt
         .compare(password, user.password)
         .then((matched) => {
-          if (!matched) {
-            // хеши не совпали — отклоняем промис
-            // console.log('promis rej');
-            Promise.reject(new Error('Неправильные почта или пароль'));
+          if (matched) {
+            console.log('promis ok');
+            const token = jwt.sign({ _id: user._id }, 'very-secret-key', { expiresIn: '7d' });
+            res.status(SUCCESS_CODE).send({ token, user, message: 'Всё верно, аутентификация успешна!' });
+          } else {
+            res.status(NOT_CORRECT_DATA).send({ message: 'Неправильные почта или пароль. 000' });
           }
-          // аутентификация успешна
-          // console.log('promis ok');
-          const token = jwt.sign({ _id: user._id }, 'very-secret-key', { expiresIn: '7d' });
-          res.send({ token, user, message: 'Всё верно!' });
         })
       })
-    // .then((user) => res.status(SUCCESS_CODE).send({email, password}))
     .catch((err) => {
       if (err.message === 'NotFindEmail') {
         res
-          .status(NOT_FIND_ERROR_CODE)
-          .send({ message: 'Пользователь с таким email не найден' });
+          .status(NOT_CORRECT_DATA)
+          .send({ message: 'Неправильные почта или пароль. 001' });
       } else {
         res
           .status(NOT_CORRECT_DATA_ERROR_CODE)
