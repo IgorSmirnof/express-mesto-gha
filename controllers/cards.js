@@ -59,38 +59,23 @@ function deleteCard(req, res) {
           message: 'Можно удалить только свою карточку',
         });
       }
-    }
-    )
+    })
     .catch((err) => {
       if (err.message === 'NotValidId') {
         res
           .status(NOT_FIND_ERROR_CODE)
           .send({ message: 'Карточка с указанным id не существует' });
+      } else if (err.name === 'CastError') {
+        res
+          .status(NOT_CORRECT_DATA_ERROR_CODE)
+          .send({ message: 'Переданы некорректные данные.', error: err });
       } else {
         res
-          .status(000)
-          .send({ message: '000' });
+          .status(DEFAULT_ERROR_CODE)
+          .send({ message: 'На сервере произошла ошибка.', error: err });
       }
-    })
-
-
-    // .then(() => res.status(SUCCESS_CODE).send({ message: 'Карточка с указанным id удалена' }))
-    // .catch((err) => {
-    //   if (err.message === 'NotValidId') {
-    //     res
-    //       .status(NOT_FIND_ERROR_CODE)
-    //       .send({ message: 'Карточка с указанным id не существует' });
-    //   } else if (err.name === 'CastError') {
-    //     res
-    //       .status(NOT_CORRECT_DATA_ERROR_CODE)
-    //       .send({ message: 'Переданы некорректные данные.', error: err });
-    //   } else {
-    //     res
-    //       .status(DEFAULT_ERROR_CODE)
-    //       .send({ message: 'На сервере произошла ошибка.', error: err });
-    //   }
-    //   res.end();
-    // });
+      res.end();
+    });
 }
 
 function createCard(req, res) {
