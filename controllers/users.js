@@ -15,32 +15,6 @@ function getUsers(_req, res) {
     });
 }
 
-// const checkUserId = (user, res) => {
-//   if (user) {
-//     return res.status(SUCCESS_CODE).send(user);
-//   }
-//   return res
-//     .status(NOT_FIND_ERROR_CODE)
-//     .send({ message: 'Пользователь с таким id не найден' });
-// };
-
-// function getUser(req, res) {
-//   const { id } = req.params;
-//   User
-//     .findById(id)
-//     .then((user) => checkUserId(user, res))
-//     .catch((err) => {
-//       if (err) {
-//         res
-//           .status(NOT_CORRECT_DATA_ERROR_CODE)
-//           .send({ message: 'На сервере произошла ошибка.', error: err.message });
-//       }
-//     });
-// }
-
-// Спасибо за видео. я встреал orFail, но не разобрался как он работает.
-// С ним код выглятид лучше и становится читаемым. еще раз Спасибо!
-
 function getUser(req, res) {
   const { id } = req.params;
   User
@@ -64,14 +38,16 @@ function createUser(req, res) {
   const {
     name, about, avatar, email, password,
   } = req.body;
-  User
-    .create({
-      name, about, avatar, email, password,
-    })
+  bcrypt
+    .hash(password, 10)
+    .then((hash) => User.create({
+      email: req.body.email,
+      password: hash,
+    }))
     .then((user) => {
-      const { _id } = user;
+      // const { _id } = user;
       res.status(CREATE_CODE).send({
-        name, about, avatar, email, password, _id,
+        name, about, avatar, email, password,
       });
     })
     .catch((err) => {
