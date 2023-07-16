@@ -108,22 +108,26 @@ function updateAvatar(req, res) {
 }
 
 function login(req, res) {
-  const { email, password } = req.params;
+  const { email, password } = req.body;
+  console.log('entr:', password, email);
   User
-    .findOne(email)
+    .findOne({ email })
     .orFail(new Error('NotFindEmail'))
-    .then((user) => bcrypt
-      .compare(password, user.password)
-      .then((matched) => {
-        if (!matched) {
-        // хеши не совпали — отклоняем промис
-          Promise.reject(new Error('Неправильные почта или пароль'));
-        }
-        // аутентификация успешна
-        const token = jwt.sign({ _id: user._id }, 'very-secret-key', { expiresIn: '7d' });
-        res.send({ token, user, message: 'Всё верно!' });
-      }))
-
+    .then((user) => {
+      bcrypt
+        .compare(password, user.password)
+        .then((matched) => {
+          if (!matched) {
+            // хеши не совпали — отклоняем промис
+            // console.log('promis rej');
+            Promise.reject(new Error('Неправильные почта или пароль'));
+          }
+          // аутентификация успешна
+          // console.log('promis ok');
+          const token = jwt.sign({ _id: user._id }, 'very-secret-key', { expiresIn: '7d' });
+          res.send({ token, user, message: 'Всё верно!' });
+        })
+      })
     // .then((user) => res.status(SUCCESS_CODE).send({email, password}))
     .catch((err) => {
       if (err.message === 'NotFindEmail') {
