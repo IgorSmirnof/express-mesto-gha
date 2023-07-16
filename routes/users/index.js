@@ -12,7 +12,7 @@ const URL_REXP = require('../../utils/rexp');
 router.get('/', celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
-    link: Joi.string().required().parrern(URL_REXP),
+    link: Joi.string().required().pattern(URL_REXP),
   }),
 }), getUsers);
 
