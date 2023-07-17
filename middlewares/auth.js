@@ -6,7 +6,7 @@ const auth = (req, res, next) => {
   let payload;
   try {
     payload = jwt.verify(token, 'very-secret-key');
-    console.log(payload);
+    console.log('success payload:', payload);
   } catch (err) {
     return res
       .status(NOT_CORRECT_DATA)
