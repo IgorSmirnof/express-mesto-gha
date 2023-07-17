@@ -66,7 +66,7 @@ function createUser(req, res) {
       email: req.body.email,
       password: hash,
     }))
-    .then((user) => {
+    .then(() => {
       // const { _id } = user;
       res.status(CREATE_CODE).send({
         email, name, about, avatar,

@@ -8,7 +8,6 @@ const usersRoutes = require('./users');
 const cardRoutes = require('./cards');
 const notFoundRoutes = require('./notFound');
 
-
 // celebrate({
 //     body: Joi.object().keys({
 //       email: Joi.string().required().email(),

@@ -20,7 +20,7 @@ const auth = (req, res, next) => {
       .send({ message: 'Необходима авторизация auth' });
   }
   req.user = payload;
-  next();
+  return next();
 };
 
 module.exports = auth;
