@@ -50,7 +50,7 @@ function deleteCard(req, res) {
     .orFail(new Error('NotValidId'))
     .then((card) => {
       const cardOwner = card.owner.toString();
-      //console.log(cardOwner, userId);
+      // console.log(cardOwner, userId);
       if (cardOwner === userId) {
         card.deleteOne();
         res.status(SUCCESS_CODE).send({ card });
