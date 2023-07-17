@@ -9,12 +9,7 @@ const URL_REXP = require('../../utils/rexp');
 //   getUsers, getUser, createUser, updateProfile, updateAvatar, login, getCurrentUser,
 // } = require('../../controllers/users');
 
-router.get('/', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().required().min(2).max(30),
-    link: Joi.string().required().pattern(URL_REXP),
-  }),
-}), getUsers);
+router.get('/', getUsers);
 
 router.get('/me', getCurrentUser);
 router.get('/:id', getUser);
