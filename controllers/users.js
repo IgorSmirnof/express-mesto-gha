@@ -77,7 +77,7 @@ function createUser(req, res) {
         res
           .status(NOT_CORRECT_DATA_ERROR_CODE)
           .send({ message: 'Переданы некорректные данные.', error: err.message });
-      } else if (err.code === 11000) {
+      } else if (err.code === 'E11000') {
         res
           .status(CONFLICT_ERROR_CODE)
           .send({ message: 'На сервере произошла ошибка.', error: err.message });
