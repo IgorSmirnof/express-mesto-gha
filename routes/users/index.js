@@ -13,7 +13,15 @@ router.get('/', getUsers);
 
 router.get('/me', getCurrentUser);
 router.get('/:id', getUser);
-router.post('/', createUser);
+router.post('/', celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(30),
+    avatar: Joi.string().pattern(URL_REXP),
+    password: Joi.string().min(3).max(30).required(),
+    email: Joi.string().email().required(),
+  }),
+}), createUser);
 
 router.patch('/me', celebrate({
   body: Joi.object().keys({
@@ -24,7 +32,6 @@ router.patch('/me', celebrate({
 
 router.patch('/me/avatar', celebrate({
   body: Joi.object().keys({
-    // name: Joi.string().required().min(2).max(30),
     link: Joi.string().required().regex(URL_REXP),
   }),
 }), updateAvatar);

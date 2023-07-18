@@ -5,21 +5,21 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      minlength: [2, 'Поле должно быть длиной от 2 до 30 символов'],
-      maxlength: [30, 'Поле должно быть длиной от 2 до 30 символов'],
+      // minlength: [2, 'Поле должно быть длиной от 2 до 30 символов'],
+      // maxlength: [30, 'Поле должно быть длиной от 2 до 30 символов'],
       default: 'Жак-Ив Кусто',
     },
 
     about: {
       type: String,
-      minlength: [2, 'Поле должно быть длиной от 2 до 30 символов'],
-      maxlength: [30, 'Поле должно быть длиной от 2 до 30 символов'],
+      // minlength: [2, 'Поле должно быть длиной от 2 до 30 символов'],
+      // maxlength: [30, 'Поле должно быть длиной от 2 до 30 символов'],
       default: 'Исследователь',
     },
 
     avatar: {
       type: String,
-      match: /(https?:\/\/.*\.(?:png|jpg|bmp|webp))/i,
+      // match: /(https?:\/\/.*\.(?:png|jpg|bmp|webp))/i,
       default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
     },
 
@@ -27,17 +27,17 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      validate: {
-        validator: (data) => validator.isEmail(data),
-        message: 'Введите валидный e-mail',
-      },
+      // validate: {
+      //   validator: (data) => validator.isEmail(data),
+      //   message: 'Введите валидный e-mail',
+      // },
     },
 
     password: {
       type: String,
       required: true,
       select: false,
-      minlength: [3, 'Пароль должен быть длиной более 3 символов'],
+      // minlength: [3, 'Пароль должен быть длиной более 3 символов'],
     },
   },
   { versionKey: false },
