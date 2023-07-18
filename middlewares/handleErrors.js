@@ -13,7 +13,7 @@ module.exports = (err, req, res, next) => {
     console.log('NotValidId');
     res
       .status(NOT_FIND_ERROR_CODE) // 404
-      .send({ message: 'Карточка с указанным id не существует' });
+      .send({ message: 'Указанного id не существует' });
     return;
   }
 

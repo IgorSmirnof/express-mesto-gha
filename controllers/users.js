@@ -50,8 +50,7 @@ function getCurrentUser(req, res, next) {
   const { id } = req.user;
   console.log('getCurrentUser: ', req.body);
   User
-    .findById(id)
-    // .orFail(() => { throw new handleOrFail('getCurrentUser XXX error') })
+    .findOne(id)
     .orFail(() => { throw new Error('NotValidId'); })
     .then((user) => res.status(SUCCESS_CODE).send(user))
     .catch((err) => next(err));
