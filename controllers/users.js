@@ -8,55 +8,63 @@ const {
   NOT_FIND_ERROR_CODE, CREATE_CODE, NOT_CORRECT_DATA, CONFLICT_ERROR_CODE,
 } = require('../utils/erroresConstans');
 
-function getUsers(_req, res) {
+function getUsers(_req, res, next) {
   return User.find({})
     .then((users) => res.status(SUCCESS_CODE).send(users))
-    .catch((err) => {
-      res
-        .status(DEFAULT_ERROR_CODE)
-        .send({ message: 'На сервере произошла ошибка.', error: err.message });
-    });
+    .catch((err) => next(err));
+    // .catch((err) => {
+    //   res
+    //     .status(DEFAULT_ERROR_CODE)
+    //     .send({ message: 'На сервере произошла ошибка.', error: err.message });
+    // });
 }
 
-function getUser(req, res) {
+function getUser(req, res, next) {
   const { id } = req.params;
   User
     .findById(id)
     .orFail(new Error('NotValidId'))
     .then((user) => res.status(SUCCESS_CODE).send(user))
-    .catch((err) => {
-      if (err.message === 'NotValidId') {
-        res
-          .status(NOT_FIND_ERROR_CODE)
-          .send({ message: 'Пользователь с таким id не найден' });
-      } else {
-        res
-          .status(NOT_CORRECT_DATA_ERROR_CODE)
-          .send({ message: 'На сервере произошла ошибка. getUser', error: err.message });
-      }
-    });
+    .catch((err) => next(err));
+    // if (err.message === 'NotValidId') {
+    //     res
+    //       .status(NOT_FIND_ERROR_CODE)
+    //       .send({ message: 'Пользователь с таким id не найден getCurrentUser' });
+    //   }
+    // .catch((err) => {
+    //   if (err.message === 'NotValidId') {
+    //     res
+    //       .status(NOT_FIND_ERROR_CODE)
+    //       .send({ message: 'Пользователь с таким id не найден' });
+    //   } else {
+    //     res
+    //       .status(NOT_CORRECT_DATA_ERROR_CODE)
+    //       .send({ message: 'На сервере произошла ошибка. getUser', error: err.message });
+    //   }
+    // });
 }
 
-function getCurrentUser(req, res) {
+function getCurrentUser(req, res, next) {
   const { id } = req.body;
   console.log('getCurrentUser: ', req.body);
   User
     .findById(id)
     .orFail(new Error('NotValidId'))
     .then((user) => res.status(SUCCESS_CODE).send(user))
-    .catch((err) => {
-      if (err.message === 'NotValidId') {
-        res
-          .status(NOT_FIND_ERROR_CODE)
-          .send({ message: 'Пользователь с таким id не найден getCurrentUser' });
-      } else {
-        res
-          .status(NOT_CORRECT_DATA_ERROR_CODE)
-          .send({ message: 'На сервере произошла ошибка.getCurrentUser', error: err.message });
-      }
-    });
+    .catch((err) => next(err));
+    // .catch((err) => {
+    //   if (err.message === 'NotValidId') {
+    //     res
+    //       .status(NOT_FIND_ERROR_CODE)
+    //       .send({ message: 'Пользователь с таким id не найден getCurrentUser' });
+    //   } else {
+    //     res
+    //       .status(NOT_CORRECT_DATA_ERROR_CODE)
+    //       .send({ message: 'На сервере произошла ошибка.getCurrentUser', error: err.message });
+    //   }
+    // });
 }
-function createUser(req, res) {
+function createUser(req, res, next) {
   const {
     name, about, avatar, email, password,
   } = req.body;
@@ -72,24 +80,25 @@ function createUser(req, res) {
         email, name, about, avatar,
       });
     })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res
-          .status(NOT_CORRECT_DATA_ERROR_CODE)
-          .send({ message: 'Переданы некорректные данные.', error: err.message });
-      } else if (err.code === 'E11000') {
-        res
-          .status(CONFLICT_ERROR_CODE)
-          .send({ message: 'На сервере произошла ошибка.', error: err.message });
-      } else {
-        res
-          .status(NOT_CORRECT_DATA_ERROR_CODE)
-          .send({ message: 'На сервере произошла ошибка.', error: err.message });
-      }
-    });
+    .catch((err) => next(err));
+    // .catch((err) => {
+    //   if (err.name === 'ValidationError') {
+    //     res
+    //       .status(NOT_CORRECT_DATA_ERROR_CODE)
+    //       .send({ message: 'Переданы некорректные данные.', error: err.message });
+    //   } else if (err.code === 'E11000') {
+    //     res
+    //       .status(CONFLICT_ERROR_CODE)
+    //       .send({ message: 'На сервере произошла ошибка. 1', error: err.message });
+    //   } else {
+    //     res
+    //       .status(NOT_CORRECT_DATA_ERROR_CODE)
+    //       .send({ message: 'На сервере произошла ошибка. 2', error: err.message });
+    //   }
+    // });
 }
 
-function updateProfile(req, res) {
+function updateProfile(req, res, next) {
   const { name, about } = req.body;
   User
     .findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
@@ -97,21 +106,22 @@ function updateProfile(req, res) {
       () => {
         res.status(SUCCESS_CODE).send({ name, about });
       },
-    )
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res
-          .status(NOT_CORRECT_DATA_ERROR_CODE)
-          .send({ message: 'Переданы некорректные данные.', error: err.message });
-      } else {
-        res
-          .status(DEFAULT_ERROR_CODE)
-          .send({ message: 'На сервере произошла ошибка.', error: err.message });
-      }
-    });
+  )
+  .catch((err) => next(err));
+    // .catch((err) => {
+    //   if (err.name === 'ValidationError') {
+    //     res
+    //       .status(NOT_CORRECT_DATA_ERROR_CODE)
+    //       .send({ message: 'Переданы некорректные данные.', error: err.message });
+    //   } else {
+    //     res
+    //       .status(DEFAULT_ERROR_CODE)
+    //       .send({ message: 'На сервере произошла ошибка.', error: err.message });
+    //   }
+    // });
 }
 
-function updateAvatar(req, res) {
+function updateAvatar(req, res, next) {
   const { avatar } = req.body;
   return User
     .findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
@@ -120,20 +130,21 @@ function updateAvatar(req, res) {
         res.status(SUCCESS_CODE).send({ avatar });
       },
     )
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res
-          .status(NOT_CORRECT_DATA_ERROR_CODE)
-          .send({ message: 'Переданы некорректные данные.', error: err.message });
-      } else {
-        res
-          .status(DEFAULT_ERROR_CODE)
-          .send({ message: 'На сервере произошла ошибка.', error: err.message });
-      }
-    });
+    // .catch((err) => {
+    //   if (err.name === 'ValidationError') {
+    //     res
+    //       .status(NOT_CORRECT_DATA_ERROR_CODE)
+    //       .send({ message: 'Переданы некорректные данные.', error: err.message });
+    //   } else {
+    //     res
+    //       .status(DEFAULT_ERROR_CODE)
+    //       .send({ message: 'На сервере произошла ошибка.', error: err.message });
+    //   }
+    // });
+    .catch((err) => next(err));
 }
 
-function login(req, res) {
+function login(req, res, next) {
   const { email, password } = req.body;
   console.log('entr:', password, email);
   User
@@ -153,17 +164,18 @@ function login(req, res) {
           }
         });
     })
-    .catch((err) => {
-      if (err.message === 'NotFindEmail') {
-        res
-          .status(NOT_CORRECT_DATA)
-          .send({ message: 'Неправильные почта или пароль. 001' });
-      } else {
-        res
-          .status(NOT_CORRECT_DATA_ERROR_CODE)
-          .send({ message: 'На сервере произошла ошибка. login', error: err.message });
-      }
-    });
+    .catch((err) => next(err));
+    // .catch((err) => {
+    //   if (err.message === 'NotFindEmail') {
+    //     res
+    //       .status(NOT_CORRECT_DATA)
+    //       .send({ message: 'Неправильные почта или пароль. 001' });
+    //   } else {
+    //     res
+    //       .status(NOT_CORRECT_DATA_ERROR_CODE)
+    //       .send({ message: 'На сервере произошла ошибка. login', error: err.message });
+    //   }
+    // });
 }
 
 module.exports = {

@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
+const { errors } = require('celebrate');
 
 // const { PORT = process.env.PORT_APP, DB_URL = process.env.DB_URL_APP } = process.env;
 const PORT = 3000;
@@ -15,6 +16,9 @@ const app = express();
 
 app.use(helmet());
 app.use(express.json());
+
+app.use(errors());
+app.use(require('./middlewares/handleErrors'));
 
 // app.use(bodyParser.json());
 
