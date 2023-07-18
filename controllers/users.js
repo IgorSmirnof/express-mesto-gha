@@ -23,7 +23,7 @@ function getUser(req, res, next) {
   const { id } = req.params;
   User
     .findById(id)
-    .orFail(new Error('NotValidId'))
+    .orFail(() => { throw new Error('NotValidId') })
     .then((user) => res.status(SUCCESS_CODE).send(user))
     .catch((err) => next(err));
   // if (err.message === 'NotValidId') {
@@ -49,7 +49,7 @@ function getCurrentUser(req, res, next) {
   console.log('getCurrentUser: ', req.body);
   User
     .findById(id)
-    .orFail(new Error('NotValidId'))
+    .orFail(() => { throw new Error('NotValidId')})
     .then((user) => res.status(SUCCESS_CODE).send(user))
     .catch((err) => next(err));
   // .catch((err) => {
