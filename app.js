@@ -17,6 +17,8 @@ const app = express();
 app.use(helmet());
 app.use(express.json());
 
+app.use(routes);
+
 app.use(errors());
 app.use(require('./middlewares/handleErrors'));
 
@@ -29,7 +31,6 @@ app.use(require('./middlewares/handleErrors'));
 //   next();
 // });
 
-app.use(routes);
 mongoose
   .connect(DB_URL)
   .then(() => {
