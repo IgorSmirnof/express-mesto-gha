@@ -5,7 +5,7 @@ const {
   NOT_CORRECT_DATA_ERROR_CODE, DEFAULT_ERROR_CODE, SUCCESS_CODE,
 } = require('../utils/erroresConstans');
 const {
-  NOT_FIND_ERROR_CODE, CREATE_CODE, NOT_CORRECT_DATA,
+  NOT_FIND_ERROR_CODE, CREATE_CODE, NOT_CORRECT_DATA, CONFLICT_ERROR_CODE,
 } = require('../utils/erroresConstans');
 
 function getUsers(_req, res) {
@@ -77,12 +77,16 @@ function createUser(req, res) {
         res
           .status(NOT_CORRECT_DATA_ERROR_CODE)
           .send({ message: 'Переданы некорректные данные.', error: err.message });
-      } else {
+      } else if (err.code === 11000) {
+        res
+          .status(CONFLICT_ERROR_CODE)
+          .send({ message: 'На сервере произошла ошибка.', error: err.message });
+      }else {
         res
           .status(NOT_CORRECT_DATA_ERROR_CODE)
           .send({ message: 'На сервере произошла ошибка.', error: err.message });
       }
-    });
+    }); CONFLICT_ERROR_CODE
 }
 
 function updateProfile(req, res) {

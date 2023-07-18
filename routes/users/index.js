@@ -28,7 +28,5 @@ router.patch('/me/avatar', celebrate({
     link: Joi.string().required().pattern(URL_REXP),
   }),
 }), updateAvatar);
-// router.post('/signin', login);
-// router.post('/signup', createUser);
 
 module.exports = router;
