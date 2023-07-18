@@ -21,7 +21,7 @@ function getUsers(_req, res, next) {
 }
 
 function getUser(req, res, next) {
-  const { id } = req.params.userId;
+  const { id } = req.params;
   User
     .findById(id)
     // .orFail(() => { throw new handleOrFail('NotValidId')})
