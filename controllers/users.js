@@ -81,12 +81,12 @@ function createUser(req, res) {
         res
           .status(CONFLICT_ERROR_CODE)
           .send({ message: 'На сервере произошла ошибка.', error: err.message });
-      }else {
+      } else {
         res
           .status(NOT_CORRECT_DATA_ERROR_CODE)
           .send({ message: 'На сервере произошла ошибка.', error: err.message });
       }
-    }); CONFLICT_ERROR_CODE
+    });
 }
 
 function updateProfile(req, res) {
