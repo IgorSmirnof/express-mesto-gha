@@ -7,6 +7,7 @@ const User = require('../models/user');
 const {
   CREATE_CODE, NOT_CORRECT_DATA, SUCCESS_CODE,
 } = require('../utils/erroresConstans');
+// const handleOrFail = require('../utils/handleOrFail');
 
 function getUsers(_req, res, next) {
   return User.find({})
@@ -23,7 +24,8 @@ function getUser(req, res, next) {
   const { id } = req.params;
   User
     .findById(id)
-    .orFail(() => { throw new Error('NotValidId') })
+    // .orFail(() => { throw new handleOrFail('NotValidId')})
+    .orFail(() => { throw new Error('NotValidId'); })
     .then((user) => res.status(SUCCESS_CODE).send(user))
     .catch((err) => next(err));
   // if (err.message === 'NotValidId') {
@@ -49,7 +51,8 @@ function getCurrentUser(req, res, next) {
   console.log('getCurrentUser: ', req.body);
   User
     .findById(id)
-    .orFail(() => { throw new Error('NotValidId')})
+    // .orFail(() => { throw new handleOrFail('getCurrentUser XXX error') })
+    .orFail(() => { throw new Error('NotValidId'); })
     .then((user) => res.status(SUCCESS_CODE).send(user))
     .catch((err) => next(err));
   // .catch((err) => {
