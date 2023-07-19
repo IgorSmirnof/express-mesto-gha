@@ -59,7 +59,7 @@ function getUser(req, res, next) {
 function getCurrentUser(req, res, next) {
   User.findById(req.user._id)
     .orFail(() => { throw new Error('NotValidId'); })
-    .then((userData) => res.send({ data: userData }))
+    .then((userData) => res.status(SUCCESS_CODE).send({ data: userData }))
     .catch((err) => next(err));
 }
 
