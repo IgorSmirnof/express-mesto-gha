@@ -49,11 +49,11 @@ function getUser(req, res, next) {
 }
 
 function getCurrentUser(req, res, next) {
-  // const { id } = req.user._id;
-  // console.log('getCurrentUser: ', req.user._id);
+  const { id } = req.user._id;
+  // console.log('getCurrentUser: ', id);
   User
-    .findOne(req.user)
-    // .then(() => console.log(req.user))
+    .findOne(id)
+    // .then(() => console.log(req.user._id))
     .orFail(() => { throw new Error('NotValidId'); })
     .then((user) => res.status(SUCCESS_CODE).send(user))
     .catch((err) => next(err));
