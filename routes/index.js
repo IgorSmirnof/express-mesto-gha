@@ -33,10 +33,10 @@ router.post(
   createUser,
 );
 
-// router.use('/users', usersRoutes);
-// router.use('/cards', cardRoutes);
-router.use('/users', auth, usersRoutes);
-router.use('/cards', auth, cardRoutes);
+router.use('/users', usersRoutes);
+router.use('/cards', cardRoutes);
+// router.use('/users', auth, usersRoutes);
+// router.use('/cards', auth, cardRoutes);
 
 router.use('/', notFoundRoutes);
 router.use(errors());
