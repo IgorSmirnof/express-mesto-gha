@@ -16,14 +16,14 @@ const app = express();
 app.use(helmet());
 app.use(express.json());
 
-// const USER_ID = '64b7cb04783fc50c1781f49b 64b7cd0fafbabcc6b02249b2';
+// '64b7cb04783fc50c1781f49b 64b7cd0fafbabcc6b02249b2';
 // _id: 'd285e3dceed844f902650f40',
-// app.use((req, res, next) => {
-//   req.user = {
-//     _id: '64b7cd0fafbabcc6b02249b2',
-//   };
-//   next();
-// });
+app.use((req, res, next) => {
+  req.user = {
+    _id: '64b7cd0fafbabcc6b02249b2',
+  };
+  next();
+});
 
 app.use(routes);
 
