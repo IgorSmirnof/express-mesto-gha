@@ -27,7 +27,7 @@ module.exports = (err, req, res, next) => {
   if (err.code === 11000) {
     res
       .status(CONFLICT_ERROR_CODE) // 409
-      .send({ message: 'На сервере произошла ошибка.', error: err.message });
+      .send({ message: 'На сервере произошла ошибка. 409', error: err.message });
     return;
   }
 
