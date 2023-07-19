@@ -16,7 +16,7 @@ const app = express();
 app.use(helmet());
 app.use(express.json());
 
-// const USER_ID = '64a5c4969465b4fa2340f173';
+// const USER_ID = '64b63aff56a6052f75462b57';
 // app.use((req, res, next) => {
 //   req.user = {
 //     _id: USER_ID,
@@ -30,8 +30,6 @@ app.use(errors());
 app.use(require('./middlewares/handleErrors'));
 
 // app.use(bodyParser.json());
-
-
 
 mongoose
   .connect(DB_URL)
