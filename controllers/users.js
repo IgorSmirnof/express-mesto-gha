@@ -48,10 +48,10 @@ function getUser(req, res, next) {
   // });
 }
 
-function getCurrentUser(req, res, next) {
+async function getCurrentUser(req, res, next) {
   const { id } = req.user._id;
   // console.log('getCurrentUser: ', id);
-  User
+  await User
     .findOne(id)
     // .then(() => console.log(req.user._id))
     .orFail(() => { throw new Error('NotValidId'); })
