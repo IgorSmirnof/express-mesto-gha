@@ -21,10 +21,10 @@ function getUsers(_req, res, next) {
 }
 
 function getUser(req, res, next) {
-  const { id } = req.params;
-  console.log(id);
+  // const { id } = req.params;
+  // console.log(id);
   User
-    .findById(id)
+    .findById(req.params)
     // .then(console.log(id))
     // .orFail(() => { throw new handleOrFail('NotValidId')})
     .orFail(() => { throw new Error('NotValidId'); })
@@ -49,10 +49,10 @@ function getUser(req, res, next) {
 }
 
 function getCurrentUser(req, res, next) {
-  const { id } = req.user;
-  console.log('getCurrentUser: ', req.body);
+  // const { id } = req.user;
+  // console.log('getCurrentUser: ', req.user, id);
   User
-    .findOne(id)
+    .findOne(req.user)
     .orFail(() => { throw new Error('NotValidId'); })
     .then((user) => res.status(SUCCESS_CODE).send({ user }))
     .catch((err) => next(err));
