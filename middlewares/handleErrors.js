@@ -42,7 +42,7 @@ module.exports = (err, req, res, next) => {
       .status(NOT_CORRECT_DATA_ERROR_CODE)
       .send({ message: 'Переданы некорректные данные.', error: err });
   }
-  if (err.name === 'NotValidIdX') {
+  if (err.name === 'NotValidIdxx') {
     console.log('handleOrFail 999');
     // res
     //   .status(NOT_CORRECT_DATA) // 401

@@ -16,13 +16,13 @@ const app = express();
 app.use(helmet());
 app.use(express.json());
 
-// const USER_ID = '64b5421883077f255cbb7948';
-// app.use((req, res, next) => {
-//   req.user = {
-//     _id: USER_ID,
-//   };
-//   next();
-// });
+const USER_ID = 'd285e3dceed844f902650f40';
+app.use((req, res, next) => {
+  req.user = {
+    _id: USER_ID,
+  };
+  next();
+});
 
 app.use(routes);
 

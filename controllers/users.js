@@ -52,7 +52,7 @@ function getCurrentUser(req, res, next) {
   // const { id } = req.user;
   // console.log('getCurrentUser: ', res);
   User
-    .findOne(req.user._id)
+    .findOne(req.user)
     // .then(() => console.log(req.user))
     .orFail(() => { throw new Error('NotValidId'); })
     .then((user) => res.status(SUCCESS_CODE).send(user))
