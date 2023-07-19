@@ -28,7 +28,7 @@ function getUser(req, res, next) {
     // .then(console.log(id))
     // .orFail(() => { throw new handleOrFail('NotValidId')})
     .orFail(() => { throw new Error('NotValidId'); })
-    .then((user) => res.status(SUCCESS_CODE).send( user ))
+    .then((user) => res.status(SUCCESS_CODE).send(user))
     .catch((err) => next(err));
   // if (err.message === 'NotValidId') {
   //     res
@@ -55,7 +55,7 @@ function getCurrentUser(req, res, next) {
     .findOne(req.user)
     // .then((user) => console.log(user))
     .orFail(() => { throw new Error('NotValidId'); })
-    .then((user) => res.status(SUCCESS_CODE).send({ user }))
+    .then((user) => res.status(SUCCESS_CODE).send(user))
     .catch((err) => next(err));
   // .catch((err) => {
   //   if (err.message === 'NotValidId') {
