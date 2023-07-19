@@ -11,11 +11,16 @@ const URL_REXP = require('../../utils/rexp');
 
 router.get('/me', getCurrentUser);
 
-router.get('/:id', celebrate({
-  body: Joi.object().keys({
-    userId: Joi.string().length(24).hex().required(),
+router.get(
+  '/:id',
+  celebrate({
+    params: Joi.object().keys({
+      id: Joi.string().length(24).hex().required(),
+    }),
   }),
-}), getUser);
+  getUser,
+);
+
 router.get('/', getUsers);
 
 router.post('/', celebrate({

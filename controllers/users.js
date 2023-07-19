@@ -22,8 +22,10 @@ function getUsers(_req, res, next) {
 
 function getUser(req, res, next) {
   const { id } = req.params;
+  console.log(id);
   User
     .findById(id)
+    // .then(console.log(id))
     // .orFail(() => { throw new handleOrFail('NotValidId')})
     .orFail(() => { throw new Error('NotValidId'); })
     .then((user) => res.status(SUCCESS_CODE).send({ user }))
