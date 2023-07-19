@@ -21,14 +21,14 @@ function getUsers(_req, res, next) {
 }
 
 function getUser(req, res, next) {
-  // const { id } = req.params;
+  const { id } = req.params;
   // console.log(id);
   User
-    .findById(req.params)
+    .findById(id)
     // .then(console.log(id))
     // .orFail(() => { throw new handleOrFail('NotValidId')})
     .orFail(() => { throw new Error('NotValidId'); })
-    .then((user) => res.status(SUCCESS_CODE).send({ user }))
+    .then((user) => res.status(SUCCESS_CODE).send( user ))
     .catch((err) => next(err));
   // if (err.message === 'NotValidId') {
   //     res
@@ -50,9 +50,10 @@ function getUser(req, res, next) {
 
 function getCurrentUser(req, res, next) {
   // const { id } = req.user;
-  // console.log('getCurrentUser: ', req.user, id);
+  console.log('getCurrentUser: ', req.user);
   User
     .findOne(req.user)
+    // .then((user) => console.log(user))
     .orFail(() => { throw new Error('NotValidId'); })
     .then((user) => res.status(SUCCESS_CODE).send({ user }))
     .catch((err) => next(err));
