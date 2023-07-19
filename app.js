@@ -16,10 +16,10 @@ const app = express();
 app.use(helmet());
 app.use(express.json());
 
-const USER_ID = 'd285e3dceed844f902650f40';
+// const USER_ID = '64b7cb04783fc50c1781f49b';
 app.use((req, res, next) => {
   req.user = {
-    _id: USER_ID,
+    _id: "d285e3dceed844f902650f40",
   };
   next();
 });
