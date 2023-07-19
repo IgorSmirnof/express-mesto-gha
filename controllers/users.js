@@ -60,7 +60,7 @@ function getCurrentUser(req, res, next) {
   User.findById(req.user._id)
     .orFail(() => { throw new Error('NotValidId'); })
     .then((userData) => res.send({ data: userData }))
-    .catch(next);
+    .catch((err) => next(err));
 }
 
 function createUser(req, res, next) {
