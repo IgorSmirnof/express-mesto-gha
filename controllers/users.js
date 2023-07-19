@@ -48,27 +48,35 @@ function getUser(req, res, next) {
   // });
 }
 
-async function getCurrentUser(req, res, next) {
-  const { id } = req.user._id;
-  // console.log('getCurrentUser: ', id);
-  await User
-    .findOne(id)
-    // .then(() => console.log(req.user._id))
-    .orFail(() => { throw new Error('NotValidId'); })
-    .then((userData) => res.status(SUCCESS_CODE).send(userData))
-    .catch((err) => next(err));
-  // .catch((err) => {
-  //   if (err.message === 'NotValidId') {
-  //     res
-  //       .status(NOT_FIND_ERROR_CODE)
-  //       .send({ message: 'Пользователь с таким id не найден getCurrentUser' });
-  //   } else {
-  //     res
-  //       .status(NOT_CORRECT_DATA_ERROR_CODE)
-  //       .send({ message: 'На сервере произошла ошибка.getCurrentUser', error: err.message });
-  //   }
-  // });
-}
+// async function getCurrentUser(req, res, next) {
+//   const { id } = req.user._id;
+//   // console.log('getCurrentUser: ', id);
+//   await User
+//     .findOne(id)
+//     // .then(() => console.log(req.user._id))
+//     .orFail(() => { throw new Error('NotValidId'); })
+//     .then((userData) => res.status(SUCCESS_CODE).send(userData))
+//     .catch((err) => next(err));
+//   // .catch((err) => {
+//   //   if (err.message === 'NotValidId') {
+//   //     res
+//   //       .status(NOT_FIND_ERROR_CODE)
+//   //       .send({ message: 'Пользователь с таким id не найден getCurrentUser' });
+//   //   } else {
+//   //     res
+//   //       .status(NOT_CORRECT_DATA_ERROR_CODE)
+//   //       .send({ message: 'На сервере произошла ошибка.getCurrentUser', error: err.message });
+//   //   }
+//   // });
+// }
+
+const getCurrentUser = (req, res, next) => {
+  User.findById(req.user._id)
+    .orFail(new Error('NotValidId'))
+    .then((foundUser) => res.send({ data: foundUser }))
+    .catch(next);
+};
+
 function createUser(req, res, next) {
   const {
     name, about, avatar, email, password,
