@@ -55,7 +55,7 @@ async function getCurrentUser(req, res, next) {
     .findOne(id)
     // .then(() => console.log(req.user._id))
     .orFail(() => { throw new Error('NotValidId'); })
-    .then((userData) => res.status(SUCCESS_CODE).send({ data: userData }))
+    .then((userData) => res.status(SUCCESS_CODE).send(userData))
     .catch((err) => next(err));
   // .catch((err) => {
   //   if (err.message === 'NotValidId') {
