@@ -10,6 +10,7 @@ const URL_REXP = require('../../utils/rexp');
 // } = require('../../controllers/users');
 
 router.get('/me', getCurrentUser);
+
 router.get('/:id', celebrate({
   body: Joi.object().keys({
     userId: Joi.string().length(24).hex().required(),

@@ -103,7 +103,8 @@ function likeCard(req, res, next) {
   const { cardId } = req.params;
   Card
     .findByIdAndUpdate(cardId, { $addToSet: { likes: req.user._id } }, { new: true })
-    .orFail(new Error('NotValidId'))
+    // .orFail(new Error('NotValidId'))
+    .orFail(() => { throw new Error('NotValidId'); })
     .then((card) => res.status(SUCCESS_CODE).send({ card, message: 'Like was add.' }))
     .catch((err) => next(err));
   // .catch((err) => {
