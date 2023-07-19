@@ -48,21 +48,20 @@ function getUser(req, res, next) {
   // });
 }
 
-function getCurrentUser(req, res, next) {
-  const { id } = req.user._id;
-  User
-    .findById(id)
-    .orFail(() => { throw new Error('NotValidId'); })
-    .then((userData) => res.status(SUCCESS_CODE).send(userData))
-    .catch((err) => next(err));
-}
-
 // function getCurrentUser(req, res, next) {
-//   User.findById(req.user._id)
-//     .orFail(new Error('NotValidId'))
-//     .then((userData) => res.send({ data: userData }))
-//     .catch(next);
+//   const { id } = req.user._id;
+//   User.findById(id)
+//     .orFail(() => { throw new Error('NotValidId'); })
+//     .then((userData) => res.status(SUCCESS_CODE).send(userData))
+//     .catch((err) => next(err));
 // }
+
+function getCurrentUser(req, res, next) {
+  User.findById(req.user._id)
+    .orFail(() => { throw new Error('NotValidId'); })
+    .then((userData) => res.send({ data: userData }))
+    .catch(next);
+}
 
 function createUser(req, res, next) {
   const {
