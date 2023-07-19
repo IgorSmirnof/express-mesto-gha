@@ -103,8 +103,9 @@ function likeCard(req, res, next) {
   const { cardId } = req.params;
   console.log(cardId);
   Card
-    .findByIdAndUpdate(cardId, { $addToSet: { likes: req.user } }, { new: true })
-    // .orFail(new Error('NotValidId'))
+    .findByIdAndUpdate(cardId, { $addToSet: { likes: req.user._id } }, { new: true })
+    // .then(console.log(cardId, req.user))
+    // .orFail('NotValidId')
     .orFail(() => { throw new Error('NotValidId'); })
     .then((card) => res.status(SUCCESS_CODE).send({ card, message: 'Like was add.' }))
     .catch((err) => next(err));
@@ -127,9 +128,10 @@ function likeCard(req, res, next) {
 
 function dislikeCard(req, res, next) {
   const { cardId } = req.params;
+  console.log('dislikeCard :', cardId);
   Card
-    .findByIdAndUpdate(cardId, { $pull: { likes: req.user } }, { new: true })
-    .orFail(new Error('NotValidId'))
+    .findByIdAndUpdate(cardId, { $pull: { likes: req.user._id } }, { new: true })
+    .orFail(() => { throw new Error('NotValidId'); })
     .then((card) => res.status(SUCCESS_CODE).send({ card, message: 'Like was canceled.' }))
     .catch((err) => next(err));
   // .catch((err) => {
