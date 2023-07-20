@@ -5,6 +5,9 @@ const User = require('../models/user');
 const {
   CREATE_CODE, NOT_CORRECT_DATA, SUCCESS_CODE,
 } = require('../utils/erroresConstans');
+const NotFoundError = require('../utils/errors/404-NotFound');
+const BadRequestError = require('../utils/errors/400-BadRequest');
+const ConflictError = require('../utils/errors/409-Conflict');
 
 function getUsers(_req, res, next) {
   return User.find({})
@@ -16,14 +19,15 @@ function getUser(req, res, next) {
   const { id } = req.params;
   User
     .findById(id)
-    .orFail(() => { throw new Error('NotValidId'); })
+    // .orFail(() => { throw new Error('NotValidId'); })
+    .orFail(() => new NotFoundError('Указанного id не существует'))
     .then((user) => res.status(SUCCESS_CODE).send(user))
     .catch(next);
 }
 
 function getCurrentUser(req, res, next) {
   User.findById(req.user._id)
-    .orFail(() => { throw new Error('NotValidId'); })
+    .orFail(() => new NotFoundError('Указанного id не существует'))
     .then((userData) => res.status(SUCCESS_CODE).send({ data: userData }))
     .catch(next);
 }
@@ -50,7 +54,16 @@ function createUser(req, res, next) {
         email: user.email,
       });
     })
-    .catch(next);
+    .catch((err) => {
+      console.log(err);
+      if (err.code === 11000) {
+        next(new ConflictError('Пользователь с данным email уже существует.'));
+      } else if (err.name === 'ValidationError') {
+        next(new BadRequestError('BadRequestError.'));
+      } else {
+        next(err);
+      }
+    });
 }
 
 function updateProfile(req, res, next) {
@@ -62,7 +75,14 @@ function updateProfile(req, res, next) {
         res.status(SUCCESS_CODE).send({ name, about });
       },
     )
-    .catch(next);
+    .catch((err) => {
+      console.log(err);
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('Переданы некорректные данные.'));
+      } else {
+        next(err);
+      }
+    });
 }
 
 function updateAvatar(req, res, next) {
@@ -74,7 +94,14 @@ function updateAvatar(req, res, next) {
         res.status(SUCCESS_CODE).send({ avatar });
       },
     )
-    .catch(next);
+    .catch((err) => {
+      console.log(err);
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('Переданы некорректные данные.'));
+      } else {
+        next(err);
+      }
+    });
 }
 
 function login(req, res, next) {
@@ -83,7 +110,8 @@ function login(req, res, next) {
   User
     .findOne({ email })
     .select('+password')
-    .orFail(() => new Error('NotFindEmail'))
+    // .orFail(() => new Error('NotFindEmail'))
+    .orFail(() => new NotFoundError('Указанного email не существует'))
     .then((user) => {
       bcrypt
         .compare(String(password), user.password)
@@ -93,7 +121,8 @@ function login(req, res, next) {
             const token = jwt.sign({ _id: user._id }, 'very-secret-key', { expiresIn: '7d' });
             res.status(SUCCESS_CODE).send({ token, user, message: 'Всё верно, аутентификация успешна!' });
           } else {
-            res.status(NOT_CORRECT_DATA).send({ message: 'Неправильные почта или пароль. 000' });
+            // res.status(NOT_CORRECT_DATA).send({ message: 'Неправильные почта или пароль. 000' });
+            res.send(() => new BadRequestError('Указанного email не существует'));
           }
         });
     })

@@ -25,7 +25,7 @@ function deleteCard(req, res, next) {
       const cardOwner = card.owner.toString();
       if (cardOwner === userId) {
         return card.deleteOne()
-          .then(() => res.send({ card }))
+          .then(() => res.send({ card }));
       }
       return next(new ForbiddenError('Можно удалить только свою карточку.'));
     })
