@@ -2,6 +2,9 @@ const Card = require('../models/card');
 const {
   CREATE_CODE, SUCCESS_CODE,
 } = require('../utils/erroresConstans');
+const BadRequestError = require('../utils/errors/400-BadRequest');
+const ForbiddenError = require('../utils/errors/403-Forbidden');
+const NotFoundError = require('../utils/errors/404-NotFound');
 
 function getCards(_req, res, next) {
   return Card
@@ -24,7 +27,8 @@ function deleteCard(req, res, next) {
         return card.deleteOne()
           .then.status(SUCCESS_CODE).send({ card });
       }
-      throw new Error('NotAccess');
+      return next(new ForbiddenError('NotAccess'));
+
       // res.status(403).send({
       //   message: 'Можно удалить только свою карточку',
       // });
