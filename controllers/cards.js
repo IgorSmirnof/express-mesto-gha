@@ -25,7 +25,8 @@ function deleteCard(req, res, next) {
       const cardOwner = card.owner.toString();
       if (cardOwner === userId) {
         return card.deleteOne()
-          .then.status(SUCCESS_CODE).send({ card });
+          .then(() => res.send({ card }));
+          // .then.status(SUCCESS_CODE).send({ card });
       }
       return next(new ForbiddenError('NotAccess'));
 
