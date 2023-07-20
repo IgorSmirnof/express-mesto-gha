@@ -4,6 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const { errors } = require('celebrate');
+const errorHandler = require('./middlewares/errorHandler');
 
 // const { PORT = process.env.PORT_APP, DB_URL = process.env.DB_URL_APP } = process.env;
 const PORT = 3000;
@@ -17,17 +18,18 @@ app.use(helmet());
 app.use(express.json());
 
 // 'd285e3dceed844f902650f40 64b7cb04783fc50c1781f49b 64b7cd0fafbabcc6b02249b2';
-// app.use((req, res, next) => {
-//   req.user = {
-//     _id: '64a5c4969465b4fa2340f173',
-//   };
-//   next();
-// });
+app.use((req, res, next) => {
+  req.user = {
+    _id: '64a5c4969465b4fa2340f173',
+  };
+  next();
+});
 
 app.use(routes);
 
 app.use(errors());
-app.use(require('./middlewares/handleErrors'));
+app.use(errorHandler);
+// app.use(require('./middlewares/handleErrors'));
 
 mongoose
   .connect(DB_URL)

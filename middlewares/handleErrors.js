@@ -8,13 +8,13 @@ const {
 module.exports = (err, req, res, next) => {
   console.log('handleErr:', err);
 
-  if (err.message === 'NotValidId') {
-    console.log('NotValidId');
-    res
-      .status(NOT_FIND_ERROR_CODE) // 404
-      .send({ message: 'Указанного id не существует' });
-    return;
-  }
+  // if (err.message === 'NotValidId') {
+  //   console.log('NotValidId');
+  //   res
+  //     .status(NOT_FIND_ERROR_CODE) // 404
+  //     .send({ message: 'Указанного id не существует' });
+  //   return;
+  // }
 
   if (err.name === 'ValidationError') {
     res

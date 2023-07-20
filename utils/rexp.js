@@ -2,6 +2,7 @@
 // --> https://regex101.com/r/VU8J9B/1
 // ^ (https ?: \/\/)?[\w-]+(\.[\w-]+)+([\w.,@?^=%&:;/~+#-]*[\w@?^=%&/~+#-])?$
 
+// https://stackoverflow.com/questions/40251930/matching-regular-expression-for-urls-in-javascript-produces-null
 const URL_REXP = /^(https?:\/\/)?([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/i;
 
 // const URL_REXP = /https?:\/\/(www.)?[a-zA-Z0-9\-._~:/?#[\]@!$&'()*+,;=,]*/;

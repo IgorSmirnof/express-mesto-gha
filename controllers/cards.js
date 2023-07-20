@@ -3,6 +3,7 @@ const {
   CREATE_CODE, SUCCESS_CODE,
 } = require('../utils/erroresConstans');
 const BadRequestError = require('../utils/errors/400-BadRequest');
+const UnauthorizedError = require('../utils/errors/401-Unauthorized');
 const ForbiddenError = require('../utils/errors/403-Forbidden');
 const NotFoundError = require('../utils/errors/404-NotFound');
 
@@ -19,20 +20,14 @@ function deleteCard(req, res, next) {
   console.log(userId);
   Card
     .findById(cardId)
-    // .findByIdAndDelete(cardId)
-    .orFail(() => new Error('NotValidId'))
+    .orFail(new NotFoundError('Указанного id не существует'))
     .then((card) => {
       const cardOwner = card.owner.toString();
       if (cardOwner === userId) {
         return card.deleteOne()
           .then(() => res.send({ card }));
-          // .then.status(SUCCESS_CODE).send({ card });
       }
-      return next(new ForbiddenError('NotAccess'));
-
-      // res.status(403).send({
-      //   message: 'Можно удалить только свою карточку',
-      // });
+      return next(new ForbiddenError('Можно удалить только свою карточку.'));
     })
     .catch(next);
 }
