@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const { ObjectId } = mongoose.Schema.Types;
 
@@ -6,14 +7,18 @@ const cardSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      // required: true,
-      // minlength: [2, 'Поле должно быть длиной от 2 до 30 символов'],
-      // maxlength: [30, 'Поле должно быть длиной от 2 до 30 символов'],
+      required: true,
+      minlength: [2, 'Поле должно быть длиной от 2 до 30 символов'],
+      maxlength: [30, 'Поле должно быть длиной от 2 до 30 символов'],
     },
 
     link: {
       type: String,
-      // required: true,
+      required: true,
+      validate: {
+        validator: (data) => validator.isURL(data),
+        message: 'Введите валидный e-mail',
+      },
     },
 
     owner: {

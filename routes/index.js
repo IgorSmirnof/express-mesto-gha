@@ -38,7 +38,7 @@ router.post(
 router.use('/users', auth, usersRoutes);
 router.use('/cards', auth, cardRoutes);
 
-router.use('/', notFoundRoutes);
+router.use('/', auth, notFoundRoutes);
 router.use(errors());
 
 module.exports = router;
