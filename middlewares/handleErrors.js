@@ -45,7 +45,7 @@ module.exports = (err, req, res, next) => {
   if (err.message === 'NotAccess') {
     res
       .status(ACSSECC_ERROR_CODE) // 403
-      .send({ message: 'Можно удалить только свою карточку.', error: err });
+      .send({ message: 'Можно удалить только свою карточку.' });
   }
 
   next();
