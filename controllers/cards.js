@@ -20,14 +20,14 @@ function deleteCard(req, res, next) {
     .orFail(new Error('NotValidId'))
     .then((card) => {
       const cardOwner = card.owner.toString();
-      // console.log(cardOwner, userId);
       if (cardOwner === userId) {
         card.deleteOne();
         res.status(SUCCESS_CODE).send({ card });
       } else {
-        res.status(403).send({
-          message: 'Можно удалить только свою карточку',
-        });
+        res.send(() => { throw new Error('NotAccess'); });
+        // res.status(403).send({
+        //   message: 'Можно удалить только свою карточку',
+        // });
       }
     })
     .catch((err) => next(err));

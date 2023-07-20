@@ -1,5 +1,5 @@
 const {
-  NOT_CORRECT_DATA_ERROR_CODE, NOT_CORRECT_DATA, CONFLICT_ERROR_CODE, NOT_FIND_ERROR_CODE,
+  NOT_CORRECT_DATA_ERROR_CODE, NOT_CORRECT_DATA, CONFLICT_ERROR_CODE, NOT_FIND_ERROR_CODE, ACSSECC_ERROR_CODE,
 } = require('../utils/erroresConstans');
 
 module.exports = (err, req, res, next) => {
@@ -35,8 +35,16 @@ module.exports = (err, req, res, next) => {
   }
   if (err.name === 'CastError') {
     res
-      .status(NOT_CORRECT_DATA_ERROR_CODE)
+      .status(NOT_CORRECT_DATA_ERROR_CODE) // 400
       .send({ message: 'Переданы некорректные данные.', error: err });
+      return;
   }
+  if (err.name === 'NotAccess') {
+    res
+      .status(ACSSECC_ERROR_CODE) // 403
+      .send({ message: 'Можно удалить только свою карточку.', error: err });
+  }
+
+
   next();
 };
