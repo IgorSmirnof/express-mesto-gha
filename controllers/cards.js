@@ -24,7 +24,7 @@ function deleteCard(req, res, next) {
         card.deleteOne();
         res.status(SUCCESS_CODE).send({ card });
       } else {
-        res.send(() => { throw new Error('NotAccess'); });
+        res.send(new Error('NotAccess'));
         // res.status(403).send({
         //   message: 'Можно удалить только свою карточку',
         // });
