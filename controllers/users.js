@@ -9,7 +9,7 @@ const {
 function getUsers(_req, res, next) {
   return User.find({})
     .then((users) => res.status(SUCCESS_CODE).send(users))
-    .catch((err) => next(err));
+    .catch(next);
 }
 
 function getUser(req, res, next) {
@@ -18,14 +18,14 @@ function getUser(req, res, next) {
     .findById(id)
     .orFail(() => { throw new Error('NotValidId'); })
     .then((user) => res.status(SUCCESS_CODE).send(user))
-    .catch((err) => next(err));
+    .catch(next);
 }
 
 function getCurrentUser(req, res, next) {
   User.findById(req.user._id)
     .orFail(() => { throw new Error('NotValidId'); })
     .then((userData) => res.status(SUCCESS_CODE).send({ data: userData }))
-    .catch((err) => next(err));
+    .catch(next);
 }
 
 function createUser(req, res, next) {
@@ -50,7 +50,7 @@ function createUser(req, res, next) {
         email: user.email,
       });
     })
-    .catch((err) => next(err));
+    .catch(next);
 }
 
 function updateProfile(req, res, next) {
@@ -62,7 +62,7 @@ function updateProfile(req, res, next) {
         res.status(SUCCESS_CODE).send({ name, about });
       },
     )
-    .catch((err) => next(err));
+    .catch(next);
 }
 
 function updateAvatar(req, res, next) {
@@ -74,7 +74,7 @@ function updateAvatar(req, res, next) {
         res.status(SUCCESS_CODE).send({ avatar });
       },
     )
-    .catch((err) => next(err));
+    .catch(next);
 }
 
 function login(req, res, next) {
@@ -97,7 +97,7 @@ function login(req, res, next) {
           }
         });
     })
-    .catch((err) => next(err));
+    .catch(next);
 }
 
 module.exports = {

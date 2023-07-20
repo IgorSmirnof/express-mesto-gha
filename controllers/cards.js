@@ -7,7 +7,7 @@ function getCards(_req, res, next) {
   return Card
     .find({})
     .then((cards) => res.status(SUCCESS_CODE).send(cards))
-    .catch((err) => next(err));
+    .catch(next);
 }
 
 function deleteCard(req, res, next) {
@@ -17,20 +17,19 @@ function deleteCard(req, res, next) {
   Card
     .findById(cardId)
     // .findByIdAndDelete(cardId)
-    .orFail(new Error('NotValidId'))
+    .orFail(() => new Error('NotValidId'))
     .then((card) => {
       const cardOwner = card.owner.toString();
       if (cardOwner === userId) {
-        card.deleteOne();
-        res.status(SUCCESS_CODE).send({ card });
-      } else {
-        throw new Error('NotAccess');
-        // res.status(403).send({
-        //   message: 'Можно удалить только свою карточку',
-        // });
+        return card.deleteOne()
+          .then.status(SUCCESS_CODE).send({ card });
       }
+      throw new Error('NotAccess');
+      // res.status(403).send({
+      //   message: 'Можно удалить только свою карточку',
+      // });
     })
-    .catch((err) => next(err));
+    .catch(next);
 }
 
 function createCard(req, res, next) {
@@ -39,7 +38,7 @@ function createCard(req, res, next) {
   return Card
     .create({ name, link, owner: req.user })
     .then((card) => res.status(CREATE_CODE).send({ card }))
-    .catch((err) => next(err));
+    .catch(next);
 }
 
 function likeCard(req, res, next) {
@@ -49,7 +48,7 @@ function likeCard(req, res, next) {
     .findByIdAndUpdate(cardId, { $addToSet: { likes: req.user._id } }, { new: true })
     .orFail(() => { throw new Error('NotValidId'); })
     .then((card) => res.status(SUCCESS_CODE).send({ card, message: 'Like was add.' }))
-    .catch((err) => next(err));
+    .catch(next);
 }
 
 function dislikeCard(req, res, next) {
@@ -59,7 +58,7 @@ function dislikeCard(req, res, next) {
     .findByIdAndUpdate(cardId, { $pull: { likes: req.user._id } }, { new: true })
     .orFail(() => { throw new Error('NotValidId'); })
     .then((card) => res.status(SUCCESS_CODE).send({ card, message: 'Like was canceled.' }))
-    .catch((err) => next(err));
+    .catch(next);
 }
 
 module.exports = {

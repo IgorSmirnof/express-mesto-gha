@@ -1,6 +1,6 @@
 {
   "name": "express-mesto-gha",
-  "version": "1.14.0",
+  "version": "1.14.1",
   "description": "Проект Mesto: регистрация и авторизация на бэкенде",
   "main": "app.js",
   "scripts": {
@@ -9,8 +9,7 @@
     "dev": "nodemon app.js",
     "lint": "npx eslint ."
   },
-  "keywords": [],
-  "author": "",
+  "author": "IgorSmirnof",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
