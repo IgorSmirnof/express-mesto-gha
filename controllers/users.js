@@ -1,60 +1,25 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-// const {
-//   NOT_CORRECT_DATA_ERROR_CODE, DEFAULT_ERROR_CODE,  NOT_FIND_ERROR_CODE, CONFLICT_ERROR_CODE,
-// } = require('../utils/erroresConstans');
+
 const {
   CREATE_CODE, NOT_CORRECT_DATA, SUCCESS_CODE,
 } = require('../utils/erroresConstans');
-// const handleOrFail = require('../utils/handleOrFail');
 
 function getUsers(_req, res, next) {
   return User.find({})
     .then((users) => res.status(SUCCESS_CODE).send(users))
     .catch((err) => next(err));
-  // .catch((err) => {
-  //   res
-  //     .status(DEFAULT_ERROR_CODE)
-  //     .send({ message: 'На сервере произошла ошибка.', error: err.message });
-  // });
 }
 
 function getUser(req, res, next) {
   const { id } = req.params;
-  // console.log(id);
   User
     .findById(id)
-    // .then(console.log(id))
-    // .orFail(() => { throw new handleOrFail('NotValidId')})
     .orFail(() => { throw new Error('NotValidId'); })
     .then((user) => res.status(SUCCESS_CODE).send(user))
     .catch((err) => next(err));
-  // if (err.message === 'NotValidId') {
-  //     res
-  //       .status(NOT_FIND_ERROR_CODE)
-  //       .send({ message: 'Пользователь с таким id не найден getCurrentUser' });
-  //   }
-  // .catch((err) => {
-  //   if (err.message === 'NotValidId') {
-  //     res
-  //       .status(NOT_FIND_ERROR_CODE)
-  //       .send({ message: 'Пользователь с таким id не найден' });
-  //   } else {
-  //     res
-  //       .status(NOT_CORRECT_DATA_ERROR_CODE)
-  //       .send({ message: 'На сервере произошла ошибка. getUser', error: err.message });
-  //   }
-  // });
 }
-
-// function getCurrentUser(req, res, next) {
-//   const { id } = req.user._id;
-//   User.findById(id)
-//     .orFail(() => { throw new Error('NotValidId'); })
-//     .then((userData) => res.status(SUCCESS_CODE).send(userData))
-//     .catch((err) => next(err));
-// }
 
 function getCurrentUser(req, res, next) {
   User.findById(req.user._id)
@@ -70,7 +35,6 @@ function createUser(req, res, next) {
   bcrypt
     .hash(password, 10)
     .then((hash) => User.create({
-      // email: req.body.email,
       name,
       about,
       avatar,
@@ -79,7 +43,6 @@ function createUser(req, res, next) {
     }))
     .then((user) => {
       res.status(CREATE_CODE).send({
-        // email, name, about, avatar,
         _id: user._id,
         name: user.name,
         about: user.about,
@@ -88,21 +51,6 @@ function createUser(req, res, next) {
       });
     })
     .catch((err) => next(err));
-  // .catch((err) => {
-  //   if (err.name === 'ValidationError') {
-  //     res
-  //       .status(NOT_CORRECT_DATA_ERROR_CODE)
-  //       .send({ message: 'Переданы некорректные данные.', error: err.message });
-  //   } else if (err.code === 'E11000') {
-  //     res
-  //       .status(CONFLICT_ERROR_CODE)
-  //       .send({ message: 'На сервере произошла ошибка. 1', error: err.message });
-  //   } else {
-  //     res
-  //       .status(NOT_CORRECT_DATA_ERROR_CODE)
-  //       .send({ message: 'На сервере произошла ошибка. 2', error: err.message });
-  //   }
-  // });
 }
 
 function updateProfile(req, res, next) {
@@ -115,17 +63,6 @@ function updateProfile(req, res, next) {
       },
     )
     .catch((err) => next(err));
-  // .catch((err) => {
-  //   if (err.name === 'ValidationError') {
-  //     res
-  //       .status(NOT_CORRECT_DATA_ERROR_CODE)
-  //       .send({ message: 'Переданы некорректные данные.', error: err.message });
-  //   } else {
-  //     res
-  //       .status(DEFAULT_ERROR_CODE)
-  //       .send({ message: 'На сервере произошла ошибка.', error: err.message });
-  //   }
-  // });
 }
 
 function updateAvatar(req, res, next) {
@@ -137,17 +74,6 @@ function updateAvatar(req, res, next) {
         res.status(SUCCESS_CODE).send({ avatar });
       },
     )
-    // .catch((err) => {
-    //   if (err.name === 'ValidationError') {
-    //     res
-    //       .status(NOT_CORRECT_DATA_ERROR_CODE)
-    //       .send({ message: 'Переданы некорректные данные.', error: err.message });
-    //   } else {
-    //     res
-    //       .status(DEFAULT_ERROR_CODE)
-    //       .send({ message: 'На сервере произошла ошибка.', error: err.message });
-    //   }
-    // });
     .catch((err) => next(err));
 }
 
@@ -172,17 +98,6 @@ function login(req, res, next) {
         });
     })
     .catch((err) => next(err));
-  // .catch((err) => {
-  //   if (err.message === 'NotFindEmail') {
-  //     res
-  //       .status(NOT_CORRECT_DATA)
-  //       .send({ message: 'Неправильные почта или пароль. 001' });
-  //   } else {
-  //     res
-  //       .status(NOT_CORRECT_DATA_ERROR_CODE)
-  //       .send({ message: 'На сервере произошла ошибка. login', error: err.message });
-  //   }
-  // });
 }
 
 module.exports = {

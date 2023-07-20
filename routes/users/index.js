@@ -5,9 +5,6 @@ const {
   getUsers, getUser, createUser, updateProfile, updateAvatar, getCurrentUser,
 } = require('../../controllers/users');
 const URL_REXP = require('../../utils/rexp');
-// const {
-//   getUsers, getUser, createUser, updateProfile, updateAvatar, login, getCurrentUser,
-// } = require('../../controllers/users');
 
 router.get('/me', getCurrentUser);
 
