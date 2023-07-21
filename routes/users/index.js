@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
 
 const {
-  getUsers, getUser, createUser, updateProfile, updateAvatar, getCurrentUser,
+  getUsers, getUser, updateProfile, updateAvatar, getCurrentUser,
 } = require('../../controllers/users');
 const URL_REXP = require('../../utils/rexp');
 

@@ -6,7 +6,7 @@ const auth = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    return next(new UnauthorizedError('Необходима авторизация'));
+    return next(new UnauthorizedError('Необходима авторизация 01'));
     // res
     //   .status(401)
     //   .send({ message: 'Необходима авторизация' });
@@ -17,7 +17,7 @@ const auth = (req, res, next) => {
     payload = jwt.verify(token, 'very-secret-key');
     console.log('success payload:', payload);
   } catch (err) {
-    return next(new UnauthorizedError('Необходима авторизация'));
+    return next(new UnauthorizedError('Необходима авторизация 02'));
     // res
     //   .status(NOT_CORRECT_DATA)
     //   .send({ message: 'Необходима авторизация auth' });
