@@ -17,12 +17,12 @@ const app = express();
 app.use(helmet());
 app.use(express.json());
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '64a5c4969465b4fa2340f173',
-  };
-  next();
-});
+// app.use((req, res, next) => {
+//   req.user = {
+//     _id: '64a5c4969465b4fa2340f173',
+//   };
+//   next();
+// });
 
 app.use(routes);
 

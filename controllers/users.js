@@ -117,16 +117,15 @@ function login(req, res, next) {
         .then((matched) => {
           if (matched) {
             const token = jwt.sign({ _id: user._id }, 'very-secret-key', { expiresIn: '7d' });
-            res.status(SUCCESS_CODE).send({ token, user, message: 'Всё верно, аутентификация успешна!' });
-          } else {
-            // eslint-disable-next-line
-            res.send(() => {return new UnauthorizedError('Указанного email не существует unauth') });
-            // return next(new UnauthorizedError('Необходима авторизация 01'));
+            return res.status(SUCCESS_CODE).send({ token, message: 'Всё верно, аутентификация успешна!' });
           }
+          return next(new UnauthorizedError('Указанного email не существует unauth'));
         });
     })
     .catch(next);
 }
+// eslint-disable-next-line
+            // res.send(() => {return new UnauthorizedError('Указанного email не существует unauth') });
 
 module.exports = {
   getUsers,

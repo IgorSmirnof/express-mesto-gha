@@ -40,7 +40,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       select: false,
-      minlength: [3, 'Пароль должен быть длиной более 3 символов'],
     },
   },
   { versionKey: false },
