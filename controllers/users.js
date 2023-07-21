@@ -113,7 +113,7 @@ function login(req, res, next) {
     .findOne({ email })
     .select('+password')
     // .orFail(() => new Error('NotFindEmail'))
-    .orFail(() => new NotFoundError('Указанного email не существует.'))
+    .orFail(() => new UnauthorizedError('Указанного email не существует.orFail'))
     .then((user) => {
       bcrypt
         .compare(String(password), user.password)
