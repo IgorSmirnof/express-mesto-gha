@@ -9,7 +9,6 @@ const BadRequestError = require('../utils/errors/400-BadRequest');
 const UnauthorizedError = require('../utils/errors/401-Unauthorized');
 const NotFoundError = require('../utils/errors/404-NotFound');
 const ConflictError = require('../utils/errors/409-Conflict');
-UnauthorizedError
 
 function getUsers(_req, res, next) {
   return User.find({})
@@ -21,7 +20,6 @@ function getUser(req, res, next) {
   const { id } = req.params;
   User
     .findById(id)
-    // .orFail(() => { throw new Error('NotValidId'); })
     .orFail(() => new NotFoundError('Указанного id не существует'))
     .then((user) => res.status(SUCCESS_CODE).send(user))
     .catch(next);
@@ -112,7 +110,6 @@ function login(req, res, next) {
   User
     .findOne({ email })
     .select('+password')
-    // .orFail(() => new Error('NotFindEmail'))
     .orFail(() => new UnauthorizedError('Указанного email не существует.orFail'))
     .then((user) => {
       bcrypt
@@ -122,16 +119,13 @@ function login(req, res, next) {
             console.log('promis ok');
             const token = jwt.sign({ _id: user._id }, 'very-secret-key', { expiresIn: '7d' });
             res.status(SUCCESS_CODE).send({ token, user, message: 'Всё верно, аутентификация успешна!' });
-            // } else if (err) {
-            //   return next(err);
           } else {
             console.log('promis no');
-            // res.status(NOT_CORRECT_DATA).send({ message: 'Неправильные почта или пароль. 000' });
+            // eslint-disable-next-line
             res.send(() => {return new UnauthorizedError('Указанного email не существует unauth') });
           }
         });
     })
-    // .then(() => console.log('promis then'))
     .catch(next);
 }
 
