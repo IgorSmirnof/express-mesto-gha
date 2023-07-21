@@ -106,7 +106,7 @@ function updateAvatar(req, res, next) {
 
 function login(req, res, next) {
   const { email, password } = req.body;
-  console.log('entr:', password, email);
+  // console.log('entr:', password, email);
   User
     .findOne({ email })
     .select('+password')
@@ -116,13 +116,12 @@ function login(req, res, next) {
         .compare(String(password), user.password)
         .then((matched) => {
           if (matched) {
-            console.log('promis ok');
             const token = jwt.sign({ _id: user._id }, 'very-secret-key', { expiresIn: '7d' });
             res.status(SUCCESS_CODE).send({ token, user, message: 'Всё верно, аутентификация успешна!' });
           } else {
-            console.log('promis no');
             // eslint-disable-next-line
             res.send(() => {return new UnauthorizedError('Указанного email не существует unauth') });
+            // return next(new UnauthorizedError('Необходима авторизация 01'));
           }
         });
     })

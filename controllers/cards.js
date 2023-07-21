@@ -3,7 +3,6 @@ const {
   CREATE_CODE, SUCCESS_CODE,
 } = require('../utils/erroresConstans');
 const BadRequestError = require('../utils/errors/400-BadRequest');
-// const UnauthorizedError = require('../utils/errors/401-Unauthorized');
 const ForbiddenError = require('../utils/errors/403-Forbidden');
 const NotFoundError = require('../utils/errors/404-NotFound');
 
@@ -33,7 +32,6 @@ function deleteCard(req, res, next) {
 }
 
 function createCard(req, res, next) {
-  // console.log(req.body);
   const { name, link } = req.body;
   return Card
     .create({ name, link, owner: req.user })
@@ -49,21 +47,18 @@ function createCard(req, res, next) {
 
 function likeCard(req, res, next) {
   const { cardId } = req.params;
-  console.log(cardId);
   Card
     .findByIdAndUpdate(cardId, { $addToSet: { likes: req.user._id } }, { new: true })
     .orFail(() => new NotFoundError('Указанного id не существует'))
-    .then((card) => res.status(SUCCESS_CODE).send({ card, message: 'Like was add.' }))
+    .then((card) => res.status(SUCCESS_CODE).send({ card, message: 'Like was added.' }))
     .catch(next);
 }
 
 function dislikeCard(req, res, next) {
   const { cardId } = req.params;
-  console.log('dislikeCard :', cardId);
   Card
     .findByIdAndUpdate(cardId, { $pull: { likes: req.user._id } }, { new: true })
     .orFail(() => new NotFoundError('Указанного id не существует'))
-    // .orFail(() => { throw new Error('NotValidId'); })
     .then((card) => res.status(SUCCESS_CODE).send({ card, message: 'Like was canceled.' }))
     .catch(next);
 }

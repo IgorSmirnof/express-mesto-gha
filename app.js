@@ -17,7 +17,6 @@ const app = express();
 app.use(helmet());
 app.use(express.json());
 
-// 'd285e3dceed844f902650f40 64b7cb04783fc50c1781f49b 64b7cd0fafbabcc6b02249b2';
 app.use((req, res, next) => {
   req.user = {
     _id: '64a5c4969465b4fa2340f173',
@@ -29,7 +28,6 @@ app.use(routes);
 
 app.use(errors());
 app.use(errorHandler);
-// app.use(require('./middlewares/handleErrors'));
 
 mongoose
   .connect(DB_URL)

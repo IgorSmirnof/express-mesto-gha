@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-// const { NOT_CORRECT_DATA } = require('../utils/erroresConstans');
 const UnauthorizedError = require('../utils/errors/401-Unauthorized');
 
 const auth = (req, res, next) => {
@@ -7,9 +6,6 @@ const auth = (req, res, next) => {
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
     return next(new UnauthorizedError('Необходима авторизация 01'));
-    // res
-    //   .status(401)
-    //   .send({ message: 'Необходима авторизация' });
   }
   const token = authorization.replace('Bearer ', '');
   let payload;
@@ -18,9 +14,6 @@ const auth = (req, res, next) => {
     console.log('success payload:', payload);
   } catch (err) {
     return next(new UnauthorizedError('Необходима авторизация 02'));
-    // res
-    //   .status(NOT_CORRECT_DATA)
-    //   .send({ message: 'Необходима авторизация auth' });
   }
   req.user = payload;
   return next();
