@@ -124,8 +124,6 @@ function login(req, res, next) {
     })
     .catch(next);
 }
-// eslint-disable-next-line
-// res.send(() => {return new UnauthorizedError('Указанного email не существует unauth') });
 
 module.exports = {
   getUsers,
